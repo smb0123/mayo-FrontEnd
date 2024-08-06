@@ -1,0 +1,29 @@
+{
+  "name": "front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.51.21",
+    "@tanstack/react-query-devtools": "^5.51.21",
+    "axios": "^1.7.3",
+    "classnames": "^2.5.1",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.2",
+    "sass": "^1.77.8"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@tanstack/eslint-plugin-query": "^5.51.15",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "eslint-plugin-import": "^2.29.1"
+  }
+}
