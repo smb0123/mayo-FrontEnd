@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  background-color: #181a1e;
+  padding: 4rem 6.3rem;
+  @include flexSort(null, center, center, null);
+  position: relative;
+}
+
+.businessStatusBox {
+  position: absolute;
+  left: 4rem;
+  @include flexSort(null, null, center, 1.3rem);
+
+  p {
+    color: white;
+    @include font(4rem, 700, normal);
+  }
+}
+
+.businessStatus {
+  background-color: red;
+  filter: drop-shadow(0px 4px 50px red);
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+
+  &.open {
+    background-color: #6eb646;
+    filter: drop-shadow(0px 4px 50px #8ed169);
+  }
+}
+
+.date {
+  color: white;
+  @include font(4rem, 700, normal);
+}
