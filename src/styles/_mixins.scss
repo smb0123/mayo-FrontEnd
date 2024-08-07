@@ -6,7 +6,13 @@
   gap: $gap;
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url('../font/Inter-Regular.ttf');
+}
+
 @mixin font($size, $weight, $height) {
+  font-family: 'Inter';
   font-size: $size;
   font-style: normal;
   font-weight: $weight;
