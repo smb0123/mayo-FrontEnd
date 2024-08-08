@@ -1,16 +1,18 @@
 .buttonGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 60px;
+  gap: 45px;
   margin: 75px;
 
   button {
     background-color: #333;
     color: white;
-    padding: 35px;
+    padding: 30px;
     border: none;
     cursor: pointer;
     font-size: 20px;
+    width: 450px;
+    height: 100%;
   }
 }
 
