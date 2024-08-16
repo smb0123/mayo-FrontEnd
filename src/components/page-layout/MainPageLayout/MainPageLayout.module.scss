@@ -1,0 +1,9 @@
+.container {
+  @include flexSort(null, null, null, null);
+  height: 100%;
+}
+
+.orderBox {
+  width: 40%;
+  @include flexSort(column, null, null, null);
+}
