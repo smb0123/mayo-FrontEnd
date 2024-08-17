@@ -2,7 +2,7 @@
 import styles from '@/app/my-page/mayo-notices/page.module.scss';
 import { useState } from 'react';
 import Link from 'next/link';
-import Modal from '@/components/common/NotiModal/Modal';
+import Modal from '@/components/page-layout/NotiModal/Modal';
 
 export default function Mayo_notice() {
   const [selectedNotice, setSelectedNotice] = useState(null);
