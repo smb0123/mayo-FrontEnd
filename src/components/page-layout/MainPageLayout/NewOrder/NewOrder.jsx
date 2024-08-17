@@ -6,10 +6,13 @@ import styles from '@/components/page-layout/MainPageLayout/NewOrder/NewOrder.mo
 import Order from '@/components/common/Order/Order';
 import getNewOrder from '@/components/common/Order/api/getNewOrder';
 import { useQuery } from '@tanstack/react-query';
+import { OrderContext } from '../MainPageLayout';
+import { useContext } from 'react';
 
 const cn = classNames.bind(styles);
 
 export default function NewOrder() {
+  const { setOrderId, setOrderStatus } = useContext(OrderContext);
   const test = 'VQtTGTCc13EWulU5sZmI';
   const { data } = useQuery({
     queryKey: ['newOrder'],
@@ -27,6 +30,8 @@ export default function NewOrder() {
               menu={order.firstItemName}
               date={order.createdAt.seconds}
               id={order.reservationId}
+              setOrderId={setOrderId}
+              setOrderStatus={setOrderStatus}
               orderStatus="new"
             />
           ))
