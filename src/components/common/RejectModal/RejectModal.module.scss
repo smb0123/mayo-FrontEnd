@@ -1,0 +1,49 @@
+.container {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 3;
+  @include flexSort(null, center, center, null);
+}
+
+.box {
+  background: #fdfdfd;
+  @include flexSort(column, null, null, null);
+}
+
+.title {
+  @include font(3rem, 600, normal);
+  padding: 2rem 4rem;
+}
+
+.hr {
+  border-bottom: 0.1rem solid black;
+}
+
+.contentBox {
+  padding: 2rem 4rem;
+  @include flexSort(column, null, null, 3rem);
+}
+
+.content {
+  @include font(2.4rem, 500, normal);
+}
+
+.buttonBox {
+  @include flexSort(column, null, null, 3rem);
+}
+
+.button {
+  @include flexSort(null, center, center, null);
+  border: 0.1rem solid black;
+  @include font(3rem, 600, normal);
+  width: 100%;
+  height: 6rem;
+  background: #f2f2f2;
+
+  &:hover {
+    background-color: #f2be22;
+  }
+}

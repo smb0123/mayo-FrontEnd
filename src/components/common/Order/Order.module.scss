@@ -1,0 +1,16 @@
+.container {
+  background-color: #474a51;
+  padding: 1rem;
+  @include flexSort(column, null, null, null);
+}
+
+.title {
+  color: #fff;
+
+  @include font(2rem, 500, normal);
+  @include flexSort(null, null, center, null);
+}
+
+.menu {
+  @include font(3rem, 500, normal);
+}

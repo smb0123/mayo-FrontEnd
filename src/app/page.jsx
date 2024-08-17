@@ -1,3 +1,5 @@
+import MainPageLayout from '@/components/page-layout/MainPageLayout/MainPageLayout';
+
 export default function MainPage() {
-  return <div>메인페이지</div>;
+  return <MainPageLayout />;
 }
