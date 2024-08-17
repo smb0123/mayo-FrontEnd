@@ -1,0 +1,25 @@
+.container {
+  @include flexSort(column, null, null, null);
+  width: 40%;
+}
+
+.header {
+  color: #f2be22;
+  @include font(3.6rem, 700, normal);
+  padding: 1rem;
+  background-color: #26282c;
+}
+
+.completeDetailOrderBox {
+  background-color: #0e0e0e;
+  height: 100%;
+  @include flexSort(column, null, null, 1rem);
+  overflow-y: scroll;
+}
+
+.noCompleteOrder {
+  color: #595e66;
+  @include font(3rem, 700, normal);
+  margin-top: 2rem;
+  text-align: center;
+}
