@@ -1,0 +1,127 @@
+.container {
+  background: #f6f6f6;
+  width: 60%;
+  padding: 2rem;
+  @include flexSort(column, null, null, 1rem);
+}
+
+.titleBox {
+  @include flexSort(null, null, center, null);
+}
+
+.menuTitle {
+  color: #000;
+  @include font(2.5rem, 700, normal);
+}
+
+.detailInfoBox {
+  @include flexSort(null, null, null, 1rem);
+  height: 100%;
+}
+
+.leftDetailInfoBox {
+  @include flexSort(column, null, null, 1rem);
+  width: 60%;
+}
+
+.requestBox {
+  @include flexSort(column, space-between, null, null);
+  border: 0.1rem solid black;
+  padding: 1rem;
+  background-color: white;
+  height: 30%;
+}
+
+.requestTitle {
+  @include font(2.5rem, 700, normal);
+}
+
+.request {
+  @include font(2rem, 500, normal);
+}
+
+.detailOrderBox {
+  border: 0.1rem solid black;
+  padding: 1rem;
+  background-color: white;
+  flex: 1;
+  @include flexSort(column, null, null, 2rem);
+}
+
+.detailOrderTitle {
+  @include font(2.5rem, 700, normal);
+}
+
+.detailOrderContentBox {
+  @include flexSort(column, null, null, 3rem);
+}
+
+.detailOrderContent {
+  @include flexSort(column, null, null, 1rem);
+}
+
+.hr {
+  border-bottom: 0.1rem solid black;
+}
+
+.totalBox {
+  @include flexSort(null, flex-end, null, null);
+}
+
+.totalDetailBox {
+  @include flexSort(null, space-between, center, null);
+  width: 30%;
+
+  p {
+    @include font(2rem, 500, normal);
+  }
+}
+
+.rightDetailInfoBox {
+  border: 0.1rem solid black;
+  background-color: white;
+  flex: 1;
+  @include flexSort(column, null, null, 2rem);
+  padding: 1rem;
+}
+
+.statusBox {
+  @include flexSort(column, null, center, 2rem);
+}
+
+.title {
+  color: #f2be22;
+  @include font(1.8rem, 500, normal);
+}
+
+.name {
+  @include font(2.2rem, 600, normal);
+}
+
+.dateBox {
+  @include flexSort(column, null, null, 1rem);
+}
+
+.reservationIdBox,
+.reservationDateBox,
+.pickUpBox {
+  @include flexSort(null, null, center, 1rem);
+  @include font(2rem, 700, normal);
+}
+
+.reservationId,
+.reservationDate,
+.pickUp {
+  @include font(1.8rem, 500, normal);
+}
+
+.noOrderContainer {
+  background: #f6f6f6;
+  width: 60%;
+  @include flexSort(null, center, center, null);
+}
+
+.noOrder {
+  color: #595e66;
+  @include font(4rem, 700, normal);
+}
