@@ -6,10 +6,14 @@ import styles from '@/components/page-layout/MainPageLayout/InProgressOrder/InPr
 import { useQuery } from '@tanstack/react-query';
 import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
+import { useContext } from 'react';
+import { OrderContext } from '../MainPageLayout';
 
 const cn = classNames.bind(styles);
 
 export default function InProgressOrder() {
+  const { setOrderId, setOrderStatus } = useContext(OrderContext);
+
   const test = 'VQtTGTCc13EWulU5sZmI';
 
   const { data } = useQuery({
@@ -28,6 +32,8 @@ export default function InProgressOrder() {
               date={order.createdAt.seconds}
               menu={order.firstItemName}
               id={order.reservationId}
+              setOrderId={setOrderId}
+              setOrderStatus={setOrderStatus}
               orderStatus="inProgress"
             />
           ))
