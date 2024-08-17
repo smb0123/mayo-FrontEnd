@@ -6,9 +6,7 @@ import { OrderContext } from '@/components/page-layout/MainPageLayout/MainPageLa
 
 const cn = classNames.bind(styles);
 
-export default function Order({ menu, date, id, orderStatus }) {
-  const { setOrderId, setOrderStatus } = useContext(OrderContext);
-
+export default function Order({ menu, date, id, orderStatus, setOrderId, setOrderStatus }) {
   const time = new Date(date * 1000);
 
   const formattedDate = time.toLocaleString('ko-KR', {
@@ -19,7 +17,7 @@ export default function Order({ menu, date, id, orderStatus }) {
 
   const handleOrderClick = () => {
     setOrderId(id);
-    setOrderStatus(orderStatus);
+    setOrderStatus && setOrderStatus(orderStatus);
   };
 
   return (
