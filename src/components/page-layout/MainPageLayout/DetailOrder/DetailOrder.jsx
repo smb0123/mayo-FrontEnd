@@ -53,6 +53,10 @@ export default function DetailOrder() {
     // 만들어야함.
   };
 
+  const handleNoButtonClick = () => {
+    // 만들어야함.
+  };
+
   return (
     <>
       {orderId ? (
@@ -147,7 +151,15 @@ export default function DetailOrder() {
               yesClick={handleYesButtonClick}
             />
           )}
-          {isNoButton && <RejectModal className={cn('rejectModal')} onClick={() => setIsNoButton(false)} />}
+          {isNoButton && (
+            <YesOrNoModal
+              className={cn('modal')}
+              title="주문거절"
+              noClick={() => setIsNoButton(false)}
+              content="주문을 거절하시겠습니까?"
+              yesClick={handleNoButtonClick}
+            />
+          )}
         </>
       ) : (
         <div className={cn('noOrderContainer')}>

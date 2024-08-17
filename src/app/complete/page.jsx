@@ -1,3 +1,5 @@
+import CompletePageLayout from '@/components/page-layout/CompletePageLayout/CompletePageLayout';
+
 export default function MainPage() {
-  return <div>완료페이지</div>;
+  return <CompletePageLayout />;
 }
