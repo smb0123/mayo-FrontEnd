@@ -1,0 +1,22 @@
+.container {
+  @include flexSort(column, null, null, null);
+  overflow-y: scroll;
+}
+
+.buttonBox {
+  top: 30rem;
+  position: fixed;
+  right: 4rem;
+  @include flexSort(column, null, null, 10rem);
+}
+
+.button {
+  padding: 1rem 3rem;
+  background-color: #ededed;
+  @include font(6rem, 700, normal);
+  border: 0.2rem solid black;
+
+  &:hover {
+    background-color: #f2be22;
+  }
+}

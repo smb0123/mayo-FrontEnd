@@ -1,4 +1,4 @@
 .container {
   @include flexSort(null, null, null, null);
-  height: 100%;
+  height: calc(100% - 13.28rem);
 }

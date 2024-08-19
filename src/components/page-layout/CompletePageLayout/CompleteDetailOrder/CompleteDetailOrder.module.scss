@@ -92,6 +92,10 @@
 .title {
   color: #f2be22;
   @include font(1.8rem, 500, normal);
+
+  &.fail {
+    color: #c60000;
+  }
 }
 
 .name {

@@ -131,6 +131,15 @@
   @include font(1.8rem, 500, normal);
 }
 
+.orderButton {
+  margin-top: 10rem;
+  border-radius: 15px;
+  border: 0.1rem solid black;
+  @include font(2rem, 700, normal);
+  background: #f2be22;
+  padding: 1rem;
+}
+
 .modal {
   width: 58rem;
   height: 38rem;
