@@ -12,7 +12,7 @@ const cn = classNames.bind(styles);
 export const CompleteOrderContext = createContext();
 
 export default function CompletePageLayout() {
-  const [orderId, setOrderId] = useState(true);
+  const [orderId, setOrderId] = useState(null);
 
   return (
     <CompleteOrderContext.Provider value={{ orderId, setOrderId }}>
