@@ -71,8 +71,6 @@ export default function DetailOrder() {
     orderDoneMutation.mutate(orderId);
   };
 
-  console.log(data);
-
   return (
     <>
       {orderId ? (
