@@ -3,36 +3,21 @@ import classNames from 'classnames/bind';
 import styles from '@/components/page-layout/MainPageLayout/DetailOrder/DetailOrder.module.scss';
 import { useContext, useState } from 'react';
 import { OrderContext } from '../MainPageLayout';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getDetailOrder from './apis/getDetailOrder';
 import Menu from '@/components/common/Menu/Menu';
 import YesOrNoModal from '@/components/common/YesOrNoModal/YesOrNoModal';
-import RejectModal from '@/components/common/RejectModal/RejectModal';
+import putOrderAccept from './apis/putOrderAccept';
+import putOrderReject from './apis/putOrderReject';
+import putOrderDone from './apis/putOrderDone';
 
 const cn = classNames.bind(styles);
-
-const data1 = {
-  createdAt: {
-    seconds: 1723376049,
-  },
-  itemCount: [1, 2],
-  itemName: ['바삭바삭 로투스 요거팡 2인', '허파'],
-  pickupTime: {
-    seconds: 1723376400,
-  },
-  request: '소스빼주세요',
-  reservationId: 'id',
-  reservationIsPlastic: true,
-  subTotal: [7700, 5000],
-  totalPrice: 7700,
-  totalQuantity: 1,
-  userNickName: '민보',
-};
 
 export default function DetailOrder() {
   const { orderId, orderStatus } = useContext(OrderContext);
   const [isYesButton, setIsYesButton] = useState(false);
   const [isNoButton, setIsNoButton] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data } = useQuery({
     queryKey: ['detailOrder', orderId],
@@ -40,22 +25,53 @@ export default function DetailOrder() {
     enabled: !!orderId,
   });
 
-  const menuList = data1?.itemCount.map((count, index) => ({
+  const orderAcceptMutation = useMutation({
+    mutationFn: (orderId) => putOrderAccept(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inProgressOrder'] });
+      queryClient.invalidateQueries({ queryKey: ['newOrder'] });
+    },
+  });
+
+  const orderRejectMutation = useMutation({
+    mutationFn: (orderId) => putOrderReject(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['newOrder'] });
+    },
+  });
+
+  const orderDoneMutation = useMutation({
+    mutationFn: (orderId) => putOrderDone(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inProgressOrder'] });
+      queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
+    },
+  });
+
+  const menuList = data?.itemCount.map((count, index) => ({
     count: count,
-    subTotal: data1.subTotal[index],
-    itemName: data1.itemName[index],
+    subTotal: data?.subTotal[index],
+    itemName: data?.itemName[index],
   }));
 
-  const createTime = new Date(data1.createdAt.seconds * 1000);
-  const pickUpTime = new Date(data1.pickupTime.seconds * 1000);
+  const createTime = new Date(data?.createdAt.seconds * 1000);
+  const pickUpTime = new Date(data?.pickupTime.seconds * 1000);
 
-  const handleYesButtonClick = () => {
-    // 만들어야함.
+  const handleYesButtonClick = async () => {
+    await orderAcceptMutation.mutate(orderId);
+    setIsYesButton(false);
   };
 
   const handleNoButtonClick = () => {
-    // 만들어야함.
+    orderRejectMutation.mutate(orderId);
+    setIsNoButton(false);
   };
+
+  const handleOrderDoneButtonClick = () => {
+    orderDoneMutation.mutate(orderId);
+  };
+
+  console.log(data);
 
   return (
     <>
@@ -64,45 +80,41 @@ export default function DetailOrder() {
           <div className={cn('container')}>
             <div className={cn('titleBox')}>
               <p className={cn('menuTitle')}>
-                메뉴 {data1?.totalQuantity}개 총 {data1?.totalPrice.toLocaleString()}원
+                메뉴 {data?.totalQuantity}개 총 {data?.totalPrice.toLocaleString()}원
               </p>
-              {/* {orderStatus === 'new' && (
-            <div className={cn('buttonBox')}>
-              <button className={cn('responseButton')}>수락</button>
-              <button className={cn('responseButton')}>거절</button>
-            </div>
-          )} */}
-              <div className={cn('buttonBox')}>
-                <button onClick={() => setIsYesButton(true)} className={cn('responseButton')}>
-                  수락
-                </button>
-                <button onClick={() => setIsNoButton(true)} className={cn('responseButton')}>
-                  거절
-                </button>
-              </div>
+              {orderStatus === 'new' && (
+                <div className={cn('buttonBox')}>
+                  <button onClick={() => setIsYesButton(true)} className={cn('responseButton')}>
+                    수락
+                  </button>
+                  <button onClick={() => setIsNoButton(true)} className={cn('responseButton')}>
+                    거절
+                  </button>
+                </div>
+              )}
             </div>
             <div className={cn('detailInfoBox')}>
               <div className={cn('leftDetailInfoBox')}>
                 <div className={cn('requestBox')}>
                   <p className={cn('requestTitle')}>요청사항</p>
-                  <p className={cn('request')}>{data1.request}</p>
+                  <p className={cn('request')}>{data?.request}</p>
                   <p className={cn('request')}>
-                    일회용품 사용 여부: {data1.reservationIsPlastic ? '필요해요 !' : '필요없어요 !'}
+                    일회용품 사용 여부: {data?.reservationIsPlastic ? '필요해요 !' : '필요없어요 !'}
                   </p>
                 </div>
                 <div className={cn('detailOrderBox')}>
                   <p className={cn('detailOrderTitle')}>주문내역</p>
                   <div className={cn('detailOrderContentBox')}>
                     <div className={cn('detailOrderContent')}>
-                      {menuList.map((menu, idx) => (
+                      {menuList?.map((menu, idx) => (
                         <Menu name={menu.itemName} number={menu.count} price={menu.subTotal} key={idx} />
                       ))}
                     </div>
                     <div className={cn('hr')}></div>
                     <div className={cn('totalBox')}>
                       <div className={cn('totalDetailBox')}>
-                        <p>{data1.totalQuantity}</p>
-                        <p>{data1.totalPrice.toLocaleString()}원</p>
+                        <p>{data?.totalQuantity}</p>
+                        <p>{data?.totalPrice.toLocaleString()}원</p>
                       </div>
                     </div>
                   </div>
@@ -110,13 +122,14 @@ export default function DetailOrder() {
               </div>
               <div className={cn('rightDetailInfoBox')}>
                 <div className={cn('statusBox')}>
-                  <p className={cn('title')}>신규 주문입니다!</p>
-                  <p className={cn('name')}>{data1?.userNickName}(닉네임)</p>
-                  <p className={cn('phoneNumber')}>010-0000-0000</p>
+                  <p className={cn('title')}>
+                    {orderStatus === 'new' ? '신규 주문입니다!' : '주문이 수락되어 진행중입니다!'}
+                  </p>
+                  <p className={cn('name')}>{data?.userNickName}(닉네임)</p>
                 </div>
                 <div className={cn('dateBox')}>
                   <div className={cn('reservationIdBox')}>
-                    예약번호: <p className={cn('reservationId')}>{data1.reservationId}</p>
+                    예약번호: <p className={cn('reservationId')}>{data?.reservationId}</p>
                   </div>
                   <div className={cn('reservationDateBox')}>
                     예약일시:
@@ -138,6 +151,11 @@ export default function DetailOrder() {
                       })}
                     </p>
                   </div>
+                  {orderStatus === 'inProgress' && (
+                    <button onClick={handleOrderDoneButtonClick} className={cn('orderButton')}>
+                      주문완료
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
