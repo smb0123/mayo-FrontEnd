@@ -2,7 +2,7 @@ import styles from './Modal.module.scss';
 import { useState } from 'react';
 
 export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange }) {
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(newProduct.img || null);
 
   if (!isOpen) return null;
 
