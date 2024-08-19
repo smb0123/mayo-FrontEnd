@@ -11,7 +11,7 @@ export default function Terms() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const apiUrl = 'https://71e2-116-124-244-123.ngrok-free.app/board';
+  const apiUrl = 'https://72e5-116-124-244-123.ngrok-free.app/board';
 
   // 서버에서 데이터를 가져오는 함수
   const fetchData = async (boardId, content) => {
@@ -20,6 +20,9 @@ export default function Terms() {
       const response = await axios.get(apiUrl, {
         params: {
           boardId: boardId,
+        },
+        headers: {
+          'ngrok-skip-browser-warning': '69420', // 헤더 추가
         },
       });
       setSelectedContent(response.data.content); // JSON의 content를 설정
