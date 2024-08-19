@@ -1,0 +1,25 @@
+.container {
+  background-color: #e3e3e3;
+  padding: 2rem 0;
+  @include flexSort(null, null, null, null);
+}
+
+.leftBlank {
+  width: 20rem;
+}
+
+.header {
+  @include font(4rem, 700, normal);
+  width: 20rem;
+  @include flexSort(null, center, center, null);
+}
+
+.count {
+  @include font(4rem, 700, normal);
+  width: 20rem;
+  @include flexSort(null, center, center, null);
+}
+
+.rightBlank {
+  width: 20rem;
+}
