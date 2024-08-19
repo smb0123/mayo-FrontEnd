@@ -1,0 +1,26 @@
+.container {
+  padding: 2rem 0;
+  @include flexSort(null, null, null, null);
+}
+
+.leftBlank,
+.rightBlank {
+  width: 20rem;
+}
+
+.title {
+  @include font(3rem, 700, normal);
+  width: 20rem;
+  @include flexSort(null, center, center, null);
+}
+
+.count {
+  width: 20rem;
+  @include flexSort(null, center, center, 1rem);
+  @include font(3rem, 700, normal);
+}
+
+.minus,
+.plus {
+  cursor: pointer;
+}
