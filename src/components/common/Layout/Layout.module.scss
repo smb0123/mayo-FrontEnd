@@ -4,5 +4,6 @@
 
 .box {
   width: 100%;
+  height: 100vh;
   @include flexSort(column, null, null, null);
 }
