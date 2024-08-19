@@ -1,6 +1,7 @@
 .container {
   @include flexSort(column, null, null, null);
   width: 40%;
+  height: 100%;
 }
 
 .header {
