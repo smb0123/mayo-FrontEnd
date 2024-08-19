@@ -13,7 +13,7 @@ const cn = classNames.bind(styles);
 export const OrderContext = createContext();
 
 export default function MainPageLayout() {
-  const [orderId, setOrderId] = useState(true);
+  const [orderId, setOrderId] = useState(null);
   const [orderStatus, setOrderStatus] = useState(null);
 
   return (
