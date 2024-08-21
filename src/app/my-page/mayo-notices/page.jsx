@@ -1,23 +1,31 @@
 "use client";
 import styles from '@/app/my-page/mayo-notices/page.module.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import axiosInstance from '@/apis/axiosInstance';
 import Modal from '@/components/page-layout/NotiModal/Modal';
 
-export default function Mayo_notice() {
+export default function MayoNotice() {
+  const [notices, setNotices] = useState([]);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const notices = [
-    { title: 'mayo 앱 출시 안내', content: '안녕하세요, mayo입니다.\n2023년 10월 10일부터 카카오톡 서비스가 종료됩니다. 마감된 서비스가 앱 서비스로 전환될 예정으로 미리 안내 드립니다.\n\n전화서비스: 카카오톡 mayo 채널 -> mayo APP\n전환시점: 2022년 09월 01일 금요일\n\n그동안 카카오톡 서비스를 이용해주신 고객님들께 감사드리며 앞으로도 더 나은 서비스를 제공하기 위해 최선을 다하겠습니다. 감사합니다.' },
-    { title: 'mayo 카카오톡 서비스 일시 중단 안내', content: '내용' },
-    { title: 'mayo 카카오톡 서비스 일시 중단 안내', content: '내용' },
-    { title: 'mayo 카카오톡 서비스 일시 중단 안내', content: '내용' },
-    { title: 'mayo 카카오톡 서비스 일시 중단 안내', content: '내용' },
-    //서버연결
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axiosInstance.get('/board-notice');
+        setNotices(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('공지사항을 가져오는 데 실패했습니다.');
+        setLoading(false);
+      }
+    };
 
-    
-  ];
+    fetchNotices();
+  }, []);
 
   const openModal = (notice) => {
     setSelectedNotice(notice);
@@ -28,6 +36,12 @@ export default function Mayo_notice() {
     setModalOpen(false);
     setSelectedNotice(null);
   };
+
+  
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className={styles.container}>
