@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import styles from '@/components/page-layout/CompletePageLayout/CompleteOrder/CompleteOrder.module.scss';
 import Order from '@/components/common/Order/Order';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
 import { useInfiniteQuery } from '@tanstack/react-query';
