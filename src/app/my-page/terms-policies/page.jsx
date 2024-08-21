@@ -2,7 +2,7 @@
 import styles from '@/app/my-page/terms-policies/page.module.scss';
 import Link from 'next/link';
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 불러옵니다.
 import Modal from '@/components/page-layout/Modal/Modal';
 
 export default function Terms() {
@@ -11,18 +11,12 @@ export default function Terms() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const apiUrl = 'https://72e5-116-124-244-123.ngrok-free.app/board';
-
-  // 서버에서 데이터를 가져오는 함수
-  const fetchData = async (boardId, content) => {
+  const fetchData = async (boardId) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(apiUrl, {
+      const response = await axiosInstance.get('/board', {
         params: {
           boardId: boardId,
-        },
-        headers: {
-          'ngrok-skip-browser-warning': '69420', // 헤더 추가
         },
       });
       setSelectedContent(response.data.content); // JSON의 content를 설정
@@ -39,12 +33,12 @@ export default function Terms() {
     setSelectedContent('');
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (error) {
-    return <div>Error loading data</div>;
+    return <div>서버 오류</div>;
   }
 
   return (
