@@ -1,20 +1,27 @@
 import styles from './Modal.module.scss';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange }) {
-  const [imagePreview, setImagePreview] = useState(newProduct.img || null);
+export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange, handleImageChange }) {
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (newProduct) {
+      // If the itemImage is a string (URL), use it directly; otherwise, create an object URL
+      if (typeof newProduct.itemImage === 'string') {
+        setImagePreview(newProduct.itemImage);
+      } else if (newProduct.itemImage instanceof File) {
+        setImagePreview(URL.createObjectURL(newProduct.itemImage));
+      } else {
+        setImagePreview(null);
+      }
+    }
+  }, [newProduct]);
 
   if (!isOpen) return null;
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
@@ -25,13 +32,13 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
           <button className={styles.closeButton} onClick={onClose}>X</button>
         </div>
         <div className={styles.modalContent}>
-          <div className={styles.imageContainer}>
+          <div className={styles.imageContainer} onClick={handleImageClick}>
             {imagePreview ? (
               <img src={imagePreview} alt="상품 이미지" />
             ) : (
-              <label htmlFor="imageUpload" className={styles.uploadLabel}>
+              <div className={styles.uploadPlaceholder}>
                 <span>+</span>
-              </label>
+              </div>
             )}
             <input
               type="file"
@@ -39,89 +46,101 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               className={styles.imageUpload}
               onChange={handleImageChange}
               accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }} // 파일 입력을 숨김 처리
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="name">상품명</label>
+            <label htmlFor="itemName">상품명</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={newProduct.name}
+              id="itemName"
+              name="itemName"
+              value={newProduct.itemName || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="description">상품설명</label>
-            <input
-              type="text"
-              id="description"
-              name="description"
-              value={newProduct.description}
+            <label htmlFor="itemDescription">상품 설명</label>
+            <textarea
+              id="itemDescription"
+              name="itemDescription"
+              value={newProduct.itemDescription || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="priceBefore">할인 전 가격</label>
+            <label htmlFor="originalPrice">원래 가격</label>
             <input
-              type="text"
-              id="priceBefore"
-              name="priceBefore"
-              value={newProduct.priceBefore}
+              type="number"
+              id="originalPrice"
+              name="originalPrice"
+              value={newProduct.originalPrice || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="priceAfter">할인 후 가격</label>
+            <label htmlFor="salePrice">할인 후 가격</label>
             <input
-              type="text"
-              id="priceAfter"
-              name="priceAfter"
-              value={newProduct.priceAfter}
+              type="number"
+              id="salePrice"
+              name="salePrice"
+              value={newProduct.salePrice || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="discount">할인율</label>
+            <label htmlFor="salePercent">할인율 (%)</label>
             <input
-              type="text"
-              id="discount"
-              name="discount"
-              value={newProduct.discount}
+              type="number"
+              id="salePercent"
+              name="salePercent"
+              value={newProduct.salePercent || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="additionalInfo">추가 전달사항</label>
+            <label htmlFor="itemQuantity">재고 수량</label>
             <input
-              type="text"
-              id="additionalInfo"
-              name="additionalInfo"
-              value={newProduct.additionalInfo}
+              type="number"
+              id="itemQuantity"
+              name="itemQuantity"
+              value={newProduct.itemQuantity || ''}
               onChange={handleInputChange}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="preparationTime">조리시간</label>
+            <label htmlFor="cookingTime">조리 시간 (분)</label>
             <input
-              type="text"
-              id="preparationTime"
-              name="preparationTime"
-              value={newProduct.preparationTime}
+              type="number"
+              id="cookingTime"
+              name="cookingTime"
+              value={newProduct.cookingTime || ''}
               onChange={handleInputChange}
             />
           </div>
 
+          <div className={styles.inputGroup}>
+            <label htmlFor="additionalInformation">추가 정보</label>
+            <input
+              type="text"
+              id="additionalInformation"
+              name="additionalInformation"
+              value={newProduct.additionalInformation || ''}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
+
         <div className={styles.modalButtons}>
-          <button onClick={onDelete} className={styles.deleteButton}>메뉴삭제</button>
+          <button onClick={onDelete} className={styles.deleteButton}>메뉴 삭제</button>
           <button onClick={onSave} className={styles.saveButton}>저장</button>
         </div>
       </div>
