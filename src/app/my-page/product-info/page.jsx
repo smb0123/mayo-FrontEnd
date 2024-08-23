@@ -19,16 +19,12 @@ export default function ProductList() {
         const response = await axiosInstanceinfo.get('/item-store', {
           params: { storeId: storeId } // storeId를 쿼리 파라미터로 전달
         });
-
-        // API가 이미지에 대한 서명된 URL을 제공한다고 가정
         const productsWithSignedUrls = response.data.map(product => {
           if (product.itemImage) {
-            // 파일 객체 대신 URL 사용
             product.itemImageUrl = product.itemImage;
           }
           return product;
         });
-
         setProducts(productsWithSignedUrls); // 서버에서 가져온 제품 목록을 상태로 설정
       } catch (err) {
         console.error("제품을 가져오는 중 오류 발생:", err);
