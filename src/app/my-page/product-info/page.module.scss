@@ -8,21 +8,21 @@
   margin-bottom: 20px;
 
   .backButton {
-
     padding: 10px 20px;
     background-color: #CCCCCC;
     border: none;
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
-    
   }
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr); 
-  gap: 60px; 
+  gap: 60px;
+  max-height: 60vh; /* grid의 최대 높이 설정 */
+  overflow-y: auto; /* grid에 세로 스크롤만 허용 */
 }
 
 .item {
@@ -33,17 +33,19 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
-
+  
   .addIcon {
-    font-size: 40px;
+    
+    font-size: 100px;
     color: #f1c40f;
     cursor: pointer;
   }
 
   .productImage {
-    width: 100%;
-    height: auto;
+    width: 150px;  
+    height: 100px;
     margin-bottom: 10px;
+    object-fit: cover;
   }
 
   .productName {
