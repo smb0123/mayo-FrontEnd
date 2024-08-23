@@ -6,9 +6,9 @@ export default function MainPage() {
     <Link href="/my-page/product-info">
       <button>상품 정보</button>
     </Link>
-    <Link href="/my-page/notification-settings">
+    {/* <Link href="/my-page/notification-settings">
       <button>알림 설정</button>
-    </Link>
+    </Link> */}
     <Link href="/my-page/store-info">
       <button>가게 정보</button>
     </Link>
