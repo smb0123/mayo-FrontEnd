@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import ProductModal from '@/components/page-layout/ProductModal/Modal';
-import axiosInstanceinfo from '@/apis/axiosInstanceinfo';
+import multiPartAxiosInstance from '@/apis/multiPartAxiosInstance';
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -16,7 +16,7 @@ export default function ProductList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axiosInstanceinfo.get('/item-store', {
+        const response = await multiPartAxiosInstance.get('/item-store', {
           params: { storeId: storeId } // storeId를 쿼리 파라미터로 전달
         });
         const productsWithSignedUrls = response.data.map(product => {
@@ -96,7 +96,7 @@ export default function ProductList() {
         formData.append('itemImage', selectedProduct.itemImage);
       }
 
-      const response = await axiosInstanceinfo.post('/item', formData, {
+      const response = await multiPartAxiosInstance.post('/item', formData, {
         params: { storeId: storeId },
       });
 
@@ -133,7 +133,7 @@ export default function ProductList() {
       }
 
       // PUT 요청 전송
-      await axiosInstanceinfo.put('/item', formData, {
+      await multiPartAxiosInstance.put('/item', formData, {
         params: { itemId: selectedProduct.itemId }, // itemId를 쿼리 파라미터로 추가
       });
 
@@ -153,7 +153,7 @@ export default function ProductList() {
   const deleteProduct = async () => {
     if (window.confirm('정말로 삭제하시겠습니까?')) {
       try {
-        await axiosInstanceinfo.delete('/item', {
+        await multiPartAxiosInstance.delete('/item', {
           params: { itemId: selectedProduct.itemId },
         });
         setProducts(products.filter(product => product.itemId !== selectedProduct.itemId));

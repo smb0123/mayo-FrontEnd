@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstanceinfo = axios.create({
+const multiPartAxiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}`,
   headers: {
     'Content-Type': 'multipart/form-data',
@@ -8,4 +8,4 @@ const axiosInstanceinfo = axios.create({
   },
 });
 
-export default axiosInstanceinfo;
+export default multiPartAxiosInstance;
