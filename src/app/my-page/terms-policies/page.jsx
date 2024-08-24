@@ -33,9 +33,6 @@ export default function Terms() {
     setSelectedContent('');
   };
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
 
   if (error) {
     return <div>서버 오류</div>;
