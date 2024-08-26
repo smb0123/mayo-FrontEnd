@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 import
 
 export default function StoreInfo() {
+  const [storeId, setStoreId] = useState(''); // storeId를 상태로 관리
   const [storeName, setStoreName] = useState('');
   const [storeAddress, setStoreAddress] = useState('');
   const [storeNumber, setStoreNumber] = useState('');
@@ -12,17 +13,37 @@ export default function StoreInfo() {
   const [discountHours, setDiscountHours] = useState({ start: '', end: '' });
   const [additionalComment, setAdditionalComment] = useState('');
   const [error, setError] = useState(null);
-  const storeId = 'VQtTGTCc13EWulU5sZmI'; // storeId
 
-  const apiUrl = `/stores`; // storeId는 이제 요청 본문에 포함됩니다.
-
-  // 서버에서 데이터를 가져오는 함수
+  // 사용자 정보 가져오기
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserInfo = async () => {
       try {
-        const response = await axiosInstance.get(`${apiUrl}?storeId=${storeId}`); // GET 요청
+        const response = await axiosInstance.get('/user'); // 사용자 정보를 가져오는 API 요청
+        const userData = response.data;
+
+        if (!userData.storeRef) {
+          throw new Error('가게 정보가 설정되지 않았습니다.');
+        }
+
+        setStoreId(userData.storeRef); // storeRef를 storeId로 설정
+      } catch (err) {
+        console.error("사용자 정보를 가져오는 중 오류 발생:", err);
+        setError('사용자 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  // storeId가 설정된 후 가게 정보를 가져오는 함수
+  useEffect(() => {
+    if (!storeId) return;
+
+    const fetchStoreData = async () => {
+      try {
+        const response = await axiosInstance.get(`/stores?storeId=${storeId}`); // storeId를 사용해 가게 정보 요청
         const data = response.data;
-        
+
         // 받아온 데이터를 각 상태로 설정합니다.
         setStoreName(data.storeName);
         setStoreAddress(data.address);
@@ -31,17 +52,17 @@ export default function StoreInfo() {
         setDiscountHours({ start: data.saleStart, end: data.saleEnd });
         setAdditionalComment(data.additionalComment);
       } catch (err) {
-        console.error("Error fetching store data:", err);
-        setError('데이터를 가져오는 데 실패했습니다.');
+        console.error("가게 정보를 가져오는 중 오류 발생:", err);
+        setError('가게 정보를 가져오는 데 실패했습니다.');
       }
     };
 
-    fetchData();
-  }, [apiUrl, storeId]);
+    fetchStoreData();
+  }, [storeId]);
 
   const handleSave = async () => {
     try {
-      const response = await axiosInstance.put(apiUrl, {
+      const response = await axiosInstance.put(`/stores`, {
         storeId: storeId,
         storeName: storeName,
         address: storeAddress,
@@ -57,7 +78,7 @@ export default function StoreInfo() {
         alert('저장 완료되었습니다.');
       }
     } catch (err) {
-      console.error("Error saving store data:", err);
+      console.error("가게 정보를 저장하는 중 오류 발생:", err);
       alert('저장하는 데 실패했습니다.');
     }
   };

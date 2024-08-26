@@ -4,34 +4,55 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import ProductModal from '@/components/page-layout/ProductModal/Modal';
-import multiPartAxiosInstance from '@/apis/multiPartAxiosInstance';
+import multiPartAxiosInstance from '@/apis/multiPartAxiosInstance'; // multipart axios 인스턴스 사용
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const storeId = 'VQtTGTCc13EWulU5sZmI'; // storeId를 설정
+  const [storeId, setStoreId] = useState(null); // storeId를 상태로 저장
 
-  // 서버에서 제품 데이터를 가져오는 함수
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await multiPartAxiosInstance.get('/item-store', {
-          params: { storeId: storeId } // storeId를 쿼리 파라미터로 전달
-        });
-        const productsWithSignedUrls = response.data.map(product => {
-          if (product.itemImage) {
-            product.itemImageUrl = product.itemImage;
-          }
-          return product;
-        });
-        setProducts(productsWithSignedUrls); // 서버에서 가져온 제품 목록을 상태로 설정
-      } catch (err) {
-        console.error("제품을 가져오는 중 오류 발생:", err);
+  // 사용자 정보를 가져오는 함수
+  const fetchUserInfo = async () => {
+    try {
+      const response = await multiPartAxiosInstance.get('/user'); // /user API 호출
+      const userData = response.data;
+      if (userData && userData.storeRef) {
+        setStoreId(userData.storeRef); // storeRef를 storeId로 설정
       }
-    };
+    } catch (err) {
+      console.error('사용자 정보를 가져오는 중 오류 발생:', err);
+    }
+  };
 
-    fetchProducts();
+  // 제품 데이터를 가져오는 함수
+  const fetchProducts = async () => {
+    if (!storeId) return; // storeId가 없으면 데이터를 가져오지 않음
+
+    try {
+      const response = await multiPartAxiosInstance.get('/item-store', {
+        params: { storeId: storeId } // storeId를 쿼리 파라미터로 전달
+      });
+      const productsWithSignedUrls = response.data.map(product => {
+        if (product.itemImage) {
+          product.itemImageUrl = product.itemImage;
+        }
+        return product;
+      });
+      setProducts(productsWithSignedUrls); // 서버에서 가져온 제품 목록을 상태로 설정
+    } catch (err) {
+      console.error("제품을 가져오는 중 오류 발생:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo(); // 컴포넌트 마운트 시 사용자 정보를 먼저 가져옴
+  }, []);
+
+  useEffect(() => {
+    if (storeId) {
+      fetchProducts(); // storeId를 얻은 후에 제품 데이터를 가져옴
+    }
   }, [storeId]);
 
   const openModal = (product) => {
@@ -79,7 +100,6 @@ export default function ProductList() {
     try {
       const formData = new FormData();
 
-      // JSON 데이터를 Blob으로 변환해서 request 필드로 추가
       const jsonRequest = {
         itemName: selectedProduct.itemName,
         itemDescription: selectedProduct.itemDescription,
@@ -91,7 +111,6 @@ export default function ProductList() {
       };
       formData.append('request', new Blob([JSON.stringify(jsonRequest)], { type: 'application/json' }));
 
-      // 파일 추가
       if (selectedProduct.itemImage) {
         formData.append('itemImage', selectedProduct.itemImage);
       }
@@ -114,9 +133,8 @@ export default function ProductList() {
     try {
       const formData = new FormData();
 
-      // JSON 데이터를 Blob으로 변환해서 request 필드로 추가
       const jsonRequest = {
-        itemId: selectedProduct.itemId, // itemId를 JSON 데이터에 포함
+        itemId: selectedProduct.itemId,
         itemName: selectedProduct.itemName,
         itemDescription: selectedProduct.itemDescription,
         originalPrice: selectedProduct.originalPrice,
@@ -127,14 +145,12 @@ export default function ProductList() {
       };
       formData.append('request', new Blob([JSON.stringify(jsonRequest)], { type: 'application/json' }));
 
-      // 파일 추가
       if (selectedProduct.itemImage) {
         formData.append('itemImage', selectedProduct.itemImage);
       }
 
-      // PUT 요청 전송
       await multiPartAxiosInstance.put('/item', formData, {
-        params: { itemId: selectedProduct.itemId }, // itemId를 쿼리 파라미터로 추가
+        params: { itemId: selectedProduct.itemId },
       });
 
       setProducts((prevProducts) =>
@@ -193,11 +209,11 @@ export default function ProductList() {
         <ProductModal
           isOpen={modalOpen}
           onClose={closeModal}
-          onSave={selectedProduct.itemId ? updateProduct : addProduct} // 새 제품일 경우 추가, 기존 제품일 경우 수정
-          onDelete={deleteProduct} // 삭제 함수 전달
+          onSave={selectedProduct.itemId ? updateProduct : addProduct}
+          onDelete={deleteProduct}
           newProduct={selectedProduct}
           handleInputChange={handleInputChange}
-          handleImageChange={handleImageChange} // 이미지 변경 핸들러 추가
+          handleImageChange={handleImageChange}
         />
       )}
     </div>
