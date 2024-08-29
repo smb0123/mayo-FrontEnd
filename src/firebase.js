@@ -1,5 +1,4 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 // Firebase 구성 객체
@@ -16,14 +15,6 @@ const firebaseConfig = {
 // Firebase 앱이 초기화되어 있는지 확인합니다.
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Analytics 사용이 가능한 환경인지 확인한 후 초기화합니다.
-let analytics;
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-  }
-});
-
 const auth = getAuth(app);
 
-export { app, analytics, auth };
+export { app, auth };
