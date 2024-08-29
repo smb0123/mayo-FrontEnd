@@ -1,7 +1,7 @@
 'use client';
 import styles from './Login.module.scss';
 import Logo from '@/icons/logo.svg';
-import GoogleLogo from '@/icons/google.svg';
+import GoogleLogo from '@/icons/goolge.svg';
 import AppleLogo from '@/icons/apple.svg';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, OAuthProvider, getRedirectResult } from "firebase/auth"; // GoogleAuthProvider 가져오기
 import { auth } from '@/firebase';
