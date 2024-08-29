@@ -3,7 +3,7 @@ import styles from './Login.module.scss';
 import Logo from '@/icons/logo.svg';
 import GoogleLogo from '@/icons/google.svg';
 import AppleLogo from '@/icons/apple.svg';
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, OAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -36,13 +36,23 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
+      await signInWithRedirect(auth, provider);
+    } catch (error) {
+      alert("Google 로그인에 실패하였습니다. 다시 시도해주세요.");
+      console.error("Google 로그인 실패:", error);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    const provider = new OAuthProvider('apple.com');
+    try {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken(); // ID 토큰을 받아옵니다.
       localStorage.setItem('authToken', token); // 토큰을 로컬 스토리지에 저장
       await checkUserPermissions(); // 사용자 권한 검증
     } catch (error) {
-      alert("Google 로그인에 실패하였습니다. 다시 시도해주세요.");
-      console.error("Google 로그인 실패:", error);
+      alert("Apple 로그인에 실패하였습니다. 다시 시도해주세요.");
+      console.error("Apple 로그인 실패:", error);
     }
   };
 
@@ -100,7 +110,7 @@ export default function Login() {
           <GoogleLogo className={styles.icon} />
           Google 로그인
         </button>
-        <button className={styles.appleButton}>
+        <button className={styles.appleButton} onClick={handleAppleLogin}>
           <AppleLogo className={styles.icon} />
           애플 로그인
         </button>
