@@ -6,7 +6,7 @@ import AppleLogo from '@/icons/apple.svg';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, OAuthProvider, getRedirectResult } from "firebase/auth"; // GoogleAuthProvider 가져오기
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // 유저 정보를 가져오기 위해 사용
 
 export default function Login() {
@@ -14,24 +14,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    // 리디렉션 결과 처리
-    const checkRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const token = await result.user.getIdToken();
-          await checkUserPermissions(token); // 사용자 권한 검증
-        }
-      } catch (error) {
-        console.error("리디렉션 결과 처리 중 오류 발생:", error);
-      }
-    };
-
-    checkRedirectResult();
-  }, []);
-
-  const checkUserPermissions = async (token) => {
+  const checkUserPermissions = useCallback(async (token) => {
     try {
       const response = await axiosInstance.get('/user', {
         headers: {
@@ -52,7 +35,24 @@ export default function Login() {
       alert("로그인에 실패하였습니다. 권한이 없거나 가게 정보가 설정되지 않았습니다.");
       console.error("로그인 조건 검증 실패:", error);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    // 리디렉션 결과 처리
+    const checkRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const token = await result.user.getIdToken();
+          await checkUserPermissions(token); // 사용자 권한 검증
+        }
+      } catch (error) {
+        console.error("리디렉션 결과 처리 중 오류 발생:", error);
+      }
+    };
+
+    checkRedirectResult();
+  }, [checkUserPermissions]);
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
