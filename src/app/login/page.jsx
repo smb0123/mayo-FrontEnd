@@ -68,6 +68,9 @@ export default function Login() {
 
   const handleAppleLogin = async () => {
     const provider = new OAuthProvider('apple.com');
+    provider.addScope('email');  // 애플 로그인에서 이메일을 요청
+    provider.addScope('name');   // 애플 로그인에서 이름을 요청
+    
     try {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
@@ -121,9 +124,9 @@ export default function Login() {
           <button type="submit" className={styles.loginButton}>
             로그인
           </button>
-          <button type="button" className={styles.registerButton}>
+          {/* <button type="button" className={styles.registerButton}>
             회원가입
-          </button>
+          </button> */}
         </div>
       </form>
       <div className={styles.socialLoginContainer}>
