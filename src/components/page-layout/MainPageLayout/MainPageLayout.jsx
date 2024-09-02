@@ -6,6 +6,7 @@ import styles from '@/components/page-layout/MainPageLayout/MainPageLayout.modul
 import Logo from '@/icons/logo.svg';
 import GoogleLogo from '@/icons/goolge.svg';
 import AppleLogo from '@/icons/apple.svg';
+
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -17,6 +18,7 @@ import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // 유저 정보를 가져오기 위해 사용
+import ROUTE from '@/constants/route';
 
 const cn = classNames.bind(styles);
 
@@ -42,7 +44,7 @@ export default function MainPageLayout() {
 
         // 성공 시 메인 페이지로 이동
         alert('로그인에 성공하였습니다.');
-        router.push('/');
+        router.push(ROUTE.In_Progress);
       } catch (error) {
         alert('로그인에 실패하였습니다. 권한이 없거나 가게 정보가 설정되지 않았습니다.');
         console.error('로그인 조건 검증 실패:', error);
@@ -114,28 +116,28 @@ export default function MainPageLayout() {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.logoContainer}>
-        <Logo className={styles.logo} />
-        <h2 className={styles.subTitle}>사장님용</h2>
+    <div className={cn('loginContainer')}>
+      <div className={cn('logoContainer')}>
+        <Logo className={cn('logo')} />
+        <h2 className={cn('subTitle')}>사장님용</h2>
       </div>
-      <form className={styles.inputContainer} onSubmit={handleEmailLogin} onKeyDown={handleKeyDown}>
+      <form className={cn('inputContainer')} onSubmit={handleEmailLogin} onKeyDown={handleKeyDown}>
         <input
           type="email"
           placeholder="이메일을 입력하세요"
-          className={styles.inputField}
+          className={cn('inputField')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="비밀번호를 입력하세요"
-          className={styles.inputField}
+          className={cn('inputField')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className={styles.buttonContainer}>
-          <button type="submit" className={styles.loginButton}>
+        <div className={cn('buttonContainer')}>
+          <button type="submit" className={cn('loginButton')}>
             로그인
           </button>
           {/* <button type="button" className={styles.registerButton}>
@@ -143,13 +145,13 @@ export default function MainPageLayout() {
           </button> */}
         </div>
       </form>
-      <div className={styles.socialLoginContainer}>
-        <button className={styles.googleButton} onClick={handleGoogleLogin}>
-          <GoogleLogo className={styles.icon} />
+      <div className={cn('socialLoginContainer')}>
+        <button className={cn('googleButton')} onClick={handleGoogleLogin}>
+          <GoogleLogo className={cn('icon')} />
           Google 로그인
         </button>
-        <button className={styles.appleButton} onClick={handleAppleLogin}>
-          <AppleLogo className={styles.icon} />
+        <button className={cn('appleButton')} onClick={handleAppleLogin}>
+          <AppleLogo className={cn('icon')} />
           애플 로그인
         </button>
       </div>
