@@ -1,8 +1,6 @@
 import classNames from 'classnames/bind';
 
 import styles from '@/components/common/Order/Order.module.scss';
-import { useContext } from 'react';
-import { OrderContext } from '@/components/page-layout/MainPageLayout/MainPageLayout';
 
 const cn = classNames.bind(styles);
 
