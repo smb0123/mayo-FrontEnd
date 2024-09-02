@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from '@/components/page-layout/CompletePageLayout/CompleteDetailOrder/CompleteDetailOrder.module.scss';
 import { useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import getDetailOrder from '@/components/page-layout/MainPageLayout/DetailOrder/apis/getDetailOrder';
+import getDetailOrder from '@/components/page-layout/InProgressPageLayout/DetailOrder/apis/getDetailOrder';
 import Menu from '@/components/common/Menu/Menu';
 import { CompleteOrderContext } from '../CompletePageLayout';
 
