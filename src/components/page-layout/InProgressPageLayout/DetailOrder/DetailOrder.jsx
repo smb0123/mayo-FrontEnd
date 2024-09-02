@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import styles from '@/components/page-layout/MainPageLayout/DetailOrder/DetailOrder.module.scss';
 import { useContext, useState } from 'react';
-import { OrderContext } from '../MainPageLayout';
+import { OrderContext } from '../InProgressPageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getDetailOrder from './apis/getDetailOrder';
 import Menu from '@/components/common/Menu/Menu';

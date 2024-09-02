@@ -6,7 +6,7 @@ import styles from '@/components/page-layout/MainPageLayout/NewOrder/NewOrder.mo
 import Order from '@/components/common/Order/Order';
 import getNewOrder from '@/components/common/Order/api/getNewOrder';
 import { useQuery } from '@tanstack/react-query';
-import { OrderContext } from '../MainPageLayout';
+import { OrderContext } from '../InProgressPageLayout';
 import { useContext, useEffect, useState } from 'react';
 
 const cn = classNames.bind(styles);

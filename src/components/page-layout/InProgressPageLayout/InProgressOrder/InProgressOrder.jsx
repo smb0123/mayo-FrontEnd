@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
 import { useContext } from 'react';
-import { OrderContext } from '../MainPageLayout';
+import { OrderContext } from '../InProgressPageLayout';
 
 const cn = classNames.bind(styles);
 
