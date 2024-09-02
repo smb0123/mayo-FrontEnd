@@ -1,4 +1,3 @@
-import Layout from '@/components/common/Layout/Layout';
 import ReactQueryProvider from '@/components/common/Provider/ReactQueryProvider';
 
 import '@/styles/_reset.scss';
