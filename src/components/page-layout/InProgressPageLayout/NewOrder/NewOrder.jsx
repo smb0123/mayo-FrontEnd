@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 
-import styles from '@/components/page-layout/MainPageLayout/NewOrder/NewOrder.module.scss';
+import styles from '@/components/page-layout/InProgressPageLayout/NewOrder/NewOrder.module.scss';
 import Order from '@/components/common/Order/Order';
 import getNewOrder from '@/components/common/Order/api/getNewOrder';
 import { useQuery } from '@tanstack/react-query';

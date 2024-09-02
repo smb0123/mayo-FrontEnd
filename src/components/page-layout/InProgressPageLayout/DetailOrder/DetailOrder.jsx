@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 
-import styles from '@/components/page-layout/MainPageLayout/DetailOrder/DetailOrder.module.scss';
+import styles from '@/components/page-layout/InProgressPageLayout/DetailOrder/DetailOrder.module.scss';
 import { useContext, useState } from 'react';
 import { OrderContext } from '../InProgressPageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

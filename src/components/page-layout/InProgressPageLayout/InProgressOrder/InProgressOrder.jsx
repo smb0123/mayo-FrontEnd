@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 
-import styles from '@/components/page-layout/MainPageLayout/InProgressOrder/InProgressOrder.module.scss';
+import styles from '@/components/page-layout/InProgressPageLayout/InProgressOrder/InProgressOrder.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
