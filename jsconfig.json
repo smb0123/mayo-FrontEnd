@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*", "./public/*"]
-    },
+    "target": "esnext",
     "module": "commonjs",
-    "target": "es6",
-    "jsx": "react-jsx",
-    "checkJs": false
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/icons/*": ["public/icons/*"],
+      "@/images/*": ["public/images/*"]
+    },
+    "checkJs": true,
+    "allowJs": true,
+    "jsx": "preserve"
   },
+  "include": ["next-env.d.ts", "**/*.js", "**/*.jsx", "src/declaration.d.ts"],
   "exclude": ["node_modules"]
 }
