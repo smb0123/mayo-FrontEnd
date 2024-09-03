@@ -1,9 +1,9 @@
 'use client';
-import styles from '@/app/my-page/mayo-notices/page.module.scss';
+import styles from './page.module.scss';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axiosInstance from '@/apis/axiosInstance';
-import Modal from '@/components/common/NotiModal/Modal';
+import Modal from '@/components/common/NotiModal/NotiModal';
 
 export default function MayoNotice() {
   const [notices, setNotices] = useState([]);

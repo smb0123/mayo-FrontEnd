@@ -1,5 +1,5 @@
 // 약관 및 정책 모달
-import styles from '@/components/page-layout/Modal/Modal.module.scss';
+import styles from '@/components/common/Modal/Modal.module.scss';
 
 export default function Modal({ content, onClose }) {
   return (

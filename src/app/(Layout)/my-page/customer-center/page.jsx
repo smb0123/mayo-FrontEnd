@@ -1,4 +1,4 @@
-import styles from '@/app/my-page/customer-center/page.module.scss';
+import styles from '@/app/(Layout)/my-page/customer-center/page.module.scss';
 import Logo from '@/icons/logo.svg';
 import Link from 'next/link';
 

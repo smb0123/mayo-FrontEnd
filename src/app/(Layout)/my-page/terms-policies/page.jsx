@@ -1,5 +1,5 @@
 'use client';
-import styles from '@/app/my-page/terms-policies/page.module.scss';
+import styles from '@/app/(Layout)/my-page/terms-policies/page.module.scss';
 import Link from 'next/link';
 import { useState } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 불러옵니다.
