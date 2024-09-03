@@ -5,39 +5,31 @@ import Order from '@/components/common/Order/Order';
 import { useContext, useEffect, useState } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function CompleteOrder() {
   const { setOrderId } = useContext(CompleteOrderContext);
-  const test = 'VQtTGTCc13EWulU5sZmI';
+  const { storeId } = useStoreId();
+
   // const date = '2024-08-19T12:00:00Z';
-  const [lastRef, inView] = useInView();
   const orderArray = [];
   const [isDateButtonClick, setIsDateButtonClick] = useState(false);
   const [date, setDate] = useState();
   const [nowDate, setNowDate] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data } = useQuery({
     queryKey: ['doneOrder'],
-    queryFn: ({ pageParam }) => getDoneOrder(test, nowDate, pageParam, 8),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
-      !lastPage.last ? lastPage.pageable.pageNumber + 1 : undefined,
+    queryFn: () => getDoneOrder(storeId, nowDate),
     enabled: !!nowDate,
   });
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, fetchNextPage]);
 
   data?.pages.map((order) => order.content.map((detailOrder) => orderArray.push(detailOrder)));
 
@@ -53,6 +45,7 @@ export default function CompleteOrder() {
     // @ts-ignore
     setNowDate(moment(selectedDate).format('YYYY-MM-DD'));
   };
+  console.log(date);
 
   return (
     <div className={cn('container')}>
@@ -80,7 +73,6 @@ export default function CompleteOrder() {
         ) : (
           <p className={cn('noCompleteOrder')}>완료 건이 없습니다</p>
         )}
-        {data && <div ref={lastRef}></div>}
       </div>
     </div>
   );
