@@ -2,23 +2,25 @@
 
 import classNames from 'classnames/bind';
 
-import styles from '@/components/page-layout/MainPageLayout/InProgressOrder/InProgressOrder.module.scss';
+import styles from '@/components/page-layout/InProgressPageLayout/InProgressOrder/InProgressOrder.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
 import { useContext } from 'react';
-import { OrderContext } from '../MainPageLayout';
+import { OrderContext } from '../InProgressPageLayout';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function InProgressOrder() {
   const { setOrderId, setOrderStatus } = useContext(OrderContext);
 
-  const test = 'VQtTGTCc13EWulU5sZmI';
+  const { storeId } = useStoreId();
 
   const { data } = useQuery({
     queryKey: ['inProgressOrder'],
-    queryFn: () => getInProgressOrder(test),
+    queryFn: () => getInProgressOrder(storeId),
+    enabled: !!storeId,
   });
 
   return (

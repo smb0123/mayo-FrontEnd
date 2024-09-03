@@ -24,7 +24,7 @@
 
 .contentBox {
   padding: 2rem 4rem;
-  @include flexSort(column, null, null, 6rem);
+  @include flexSort(column, null, null, 10rem);
 }
 
 .content {

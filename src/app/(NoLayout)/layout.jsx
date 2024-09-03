@@ -1,4 +1,3 @@
-import Layout from '@/components/common/Layout/Layout';
 import ReactQueryProvider from '@/components/common/Provider/ReactQueryProvider';
 
 import '@/styles/_reset.scss';
@@ -14,7 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <ReactQueryProvider>
           <div id="modal-root"></div>
-          <Layout>{children}</Layout>
+          {children}
         </ReactQueryProvider>
       </body>
     </html>

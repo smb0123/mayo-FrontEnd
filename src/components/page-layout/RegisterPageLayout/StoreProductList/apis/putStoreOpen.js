@@ -1,9 +1,6 @@
 import axiosInstance from '@/apis/axiosInstance';
 
 export default async function putStoreOpen({ storeId, itemIdList, count }) {
-  console.log(itemIdList);
-  console.log(count);
-
   const { data } = await axiosInstance.put(`store/open?storeId=${storeId}`, {
     itemIdList: itemIdList,
     quantityList: count,

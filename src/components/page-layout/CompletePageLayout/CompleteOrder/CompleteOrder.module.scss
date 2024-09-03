@@ -4,11 +4,40 @@
   height: 100%;
 }
 
+.headerBox {
+  position: relative;
+  padding: 1rem;
+  background-color: #26282c;
+  @include flexSort(null, space-between, center, null);
+}
+
 .header {
   color: #f2be22;
   @include font(3.6rem, 700, normal);
+}
+
+.nowDate {
+  color: #f2be22;
+  @include font(3rem, 500, normal);
+}
+
+.dateButton {
+  color: white;
+  background-color: #f2be22;
+  @include font(2.5rem, 700, normal);
   padding: 1rem;
-  background-color: #26282c;
+}
+
+.calendar {
+  position: absolute;
+  right: 0;
+  top: 7rem;
+  width: 50rem;
+  height: 30rem;
+
+  .react-calendar {
+    max-width: none;
+  }
 }
 
 .completeDetailOrderBox {

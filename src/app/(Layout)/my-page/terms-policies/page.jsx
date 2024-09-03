@@ -1,9 +1,9 @@
-"use client";
+'use client';
 import styles from '@/app/my-page/terms-policies/page.module.scss';
 import Link from 'next/link';
 import { useState } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 불러옵니다.
-import Modal from '@/components/page-layout/Modal/Modal';
+import Modal from '@/components/common/Modal/Modal';
 
 export default function Terms() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +21,7 @@ export default function Terms() {
       });
       setSelectedContent(response.data.content); // JSON의 content를 설정
       setIsLoading(false);
-      setIsModalOpen(true); 
+      setIsModalOpen(true);
     } catch (err) {
       setError(err);
       setIsLoading(false);
@@ -32,7 +32,6 @@ export default function Terms() {
     setIsModalOpen(false);
     setSelectedContent('');
   };
-
 
   if (error) {
     return <div>서버 오류</div>;

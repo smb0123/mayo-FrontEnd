@@ -1,4 +1,4 @@
-import styles from './Modal.module.scss';
+import styles from './ProductModal.module.scss';
 import { useState, useEffect, useRef } from 'react';
 
 export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange, handleImageChange }) {
@@ -29,7 +29,9 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
       <div className={styles.modal}>
         <div className={styles.header}>
           <h2>상품 관리</h2>
-          <button className={styles.closeButton} onClick={onClose}>X</button>
+          <button className={styles.closeButton} onClick={onClose}>
+            X
+          </button>
         </div>
         <div className={styles.modalContent}>
           <div className={styles.imageContainer} onClick={handleImageClick}>
@@ -140,8 +142,12 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
         </div>
 
         <div className={styles.modalButtons}>
-          <button onClick={onDelete} className={styles.deleteButton}>메뉴 삭제</button>
-          <button onClick={onSave} className={styles.saveButton}>저장</button>
+          <button onClick={onDelete} className={styles.deleteButton}>
+            메뉴 삭제
+          </button>
+          <button onClick={onSave} className={styles.saveButton}>
+            저장
+          </button>
         </div>
       </div>
     </div>

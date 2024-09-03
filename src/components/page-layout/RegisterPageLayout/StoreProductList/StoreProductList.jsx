@@ -9,19 +9,18 @@ import StoreProduct from '@/components/common/StoreProduct/StoreProduct';
 import putStoreOpen from './apis/putStoreOpen';
 import { useEffect, useState } from 'react';
 import putStoreClose from './apis/putStoreClose';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function StoreProductList() {
-  const storeId = 'VQtTGTCc13EWulU5sZmI';
+  const { storeId } = useStoreId();
   const [count, setCount] = useState([]);
 
   const { data } = useQuery({
     queryKey: ['StoreProductList', storeId],
     queryFn: () => getStoreProduct(storeId),
   });
-
-  console.log(data);
 
   const itemIdList = data?.map((product) => product.itemId);
 
@@ -30,6 +29,7 @@ export default function StoreProductList() {
   const queryClient = useQueryClient();
 
   const storeOpenMutation = useMutation({
+    // @ts-ignore
     mutationFn: ({ storeId, itemIdList, count }) => putStoreOpen({ storeId, itemIdList, count }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['StoreProductList', storeId] });
@@ -46,6 +46,7 @@ export default function StoreProductList() {
   });
 
   const handleOpenClick = () => {
+    // @ts-ignore
     storeOpenMutation.mutate({ storeId, itemIdList, count });
   };
 
