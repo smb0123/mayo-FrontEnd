@@ -3,7 +3,7 @@ import styles from './page.module.scss';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-import ProductModal from '@/components/page-layout/ProductModal/Modal';
+import ProductModal from '@/components/common/ProductModal/ProductModal';
 import multiPartAxiosInstance from '@/apis/multiPartAxiosInstance'; // multipart axios 인스턴스 사용
 
 export default function ProductList() {
@@ -31,9 +31,9 @@ export default function ProductList() {
 
     try {
       const response = await multiPartAxiosInstance.get('/item-store', {
-        params: { storeId: storeId } // storeId를 쿼리 파라미터로 전달
+        params: { storeId: storeId }, // storeId를 쿼리 파라미터로 전달
       });
-      const productsWithSignedUrls = response.data.map(product => {
+      const productsWithSignedUrls = response.data.map((product) => {
         if (product.itemImage) {
           product.itemImageUrl = product.itemImage;
         }
@@ -41,7 +41,7 @@ export default function ProductList() {
       });
       setProducts(productsWithSignedUrls); // 서버에서 가져온 제품 목록을 상태로 설정
     } catch (err) {
-      console.error("제품을 가져오는 중 오류 발생:", err);
+      console.error('제품을 가져오는 중 오류 발생:', err);
     }
   };
 
@@ -56,19 +56,21 @@ export default function ProductList() {
   }, [storeId]);
 
   const openModal = (product) => {
-    setSelectedProduct(product || {
-      itemId: '',
-      itemName: '',
-      itemDescription: '',
-      originalPrice: 0,
-      salePercent: 0.0,
-      itemQuantity: 0,
-      itemOnSale: true,
-      itemImage: '',
-      salePrice: 0.0,
-      cookingTime: null,
-      additionalInformation: ''
-    });
+    setSelectedProduct(
+      product || {
+        itemId: '',
+        itemName: '',
+        itemDescription: '',
+        originalPrice: 0,
+        salePercent: 0.0,
+        itemQuantity: 0,
+        itemOnSale: true,
+        itemImage: '',
+        salePrice: 0.0,
+        cookingTime: null,
+        additionalInformation: '',
+      }
+    );
     setModalOpen(true);
   };
 
@@ -124,7 +126,7 @@ export default function ProductList() {
       closeModal();
       window.location.reload();
     } catch (err) {
-      console.error("제품 저장 중 오류 발생:", err);
+      console.error('제품 저장 중 오류 발생:', err);
       alert('저장에 실패했습니다.');
     }
   };
@@ -161,7 +163,7 @@ export default function ProductList() {
       alert('수정 완료되었습니다.');
       closeModal();
     } catch (err) {
-      console.error("제품 수정 중 오류 발생:", err);
+      console.error('제품 수정 중 오류 발생:', err);
       alert('수정에 실패했습니다.');
     }
   };
@@ -172,11 +174,11 @@ export default function ProductList() {
         await multiPartAxiosInstance.delete('/item', {
           params: { itemId: selectedProduct.itemId },
         });
-        setProducts(products.filter(product => product.itemId !== selectedProduct.itemId));
+        setProducts(products.filter((product) => product.itemId !== selectedProduct.itemId));
         alert('삭제가 완료되었습니다.');
         closeModal();
       } catch (err) {
-        console.error("제품 삭제 중 오류 발생:", err);
+        console.error('제품 삭제 중 오류 발생:', err);
         alert('삭제에 실패했습니다.');
       }
     }

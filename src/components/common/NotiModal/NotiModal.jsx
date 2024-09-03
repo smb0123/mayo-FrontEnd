@@ -1,4 +1,4 @@
-import styles from '@/components/page-layout/NotiModal/Modal.module.scss';
+import styles from '@/components/common/NotiModal/NotiModal.module.scss';
 //공지사항 모달
 export default function Modal({ title, content, onClose }) {
   return (
