@@ -13,16 +13,18 @@ import {
   signInWithEmailAndPassword,
   OAuthProvider,
   getRedirectResult,
-} from 'firebase/auth'; // GoogleAuthProvider 가져오기
+} from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '@/apis/axiosInstance'; // 유저 정보를 가져오기 위해 사용
+import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
+import storeId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function MainPageLayout() {
+  const { setStoreId } = storeId();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,7 +44,8 @@ export default function MainPageLayout() {
           throw new Error('로그인에 실패하였습니다. 권한이 없거나 가게 정보가 설정되지 않았습니다.');
         }
 
-        // 성공 시 메인 페이지로 이동
+        setStoreId(userData.storeRef);
+
         alert('로그인에 성공하였습니다.');
         router.push(ROUTE.In_Progress);
       } catch (error) {
@@ -50,7 +53,7 @@ export default function MainPageLayout() {
         console.error('로그인 조건 검증 실패:', error);
       }
     },
-    [router]
+    [router, setStoreId]
   );
 
   useEffect(() => {
@@ -140,7 +143,7 @@ export default function MainPageLayout() {
           <button type="submit" className={cn('loginButton')}>
             로그인
           </button>
-          {/* <button type="button" className={styles.registerButton}>
+          {/* <button type="button" className={cn('registerButton')}>
             회원가입
           </button> */}
         </div>

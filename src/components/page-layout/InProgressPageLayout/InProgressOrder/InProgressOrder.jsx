@@ -8,17 +8,19 @@ import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
 import { useContext } from 'react';
 import { OrderContext } from '../InProgressPageLayout';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function InProgressOrder() {
   const { setOrderId, setOrderStatus } = useContext(OrderContext);
 
-  const test = 'VQtTGTCc13EWulU5sZmI';
+  const { storeId } = useStoreId();
 
   const { data } = useQuery({
     queryKey: ['inProgressOrder'],
-    queryFn: () => getInProgressOrder(test),
+    queryFn: () => getInProgressOrder(storeId),
+    enabled: !!storeId,
   });
 
   return (
