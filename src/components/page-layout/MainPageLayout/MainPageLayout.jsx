@@ -32,7 +32,7 @@ export default function MainPageLayout() {
   const checkUserPermissions = useCallback(
     async (token) => {
       try {
-        const response = await axiosInstance.get('/user', {
+        const response = await axiosInstance.get('user', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
