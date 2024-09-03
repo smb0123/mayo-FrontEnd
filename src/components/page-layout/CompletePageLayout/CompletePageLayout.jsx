@@ -9,7 +9,12 @@ import CompleteDetailOrder from './CompleteDetailOrder/CompleteDetailOrder';
 
 const cn = classNames.bind(styles);
 
-export const CompleteOrderContext = createContext();
+const defaultValue = {
+  orderId: null,
+  setOrderId: null,
+};
+
+export const CompleteOrderContext = createContext(defaultValue);
 
 export default function CompletePageLayout() {
   const [orderId, setOrderId] = useState(null);
