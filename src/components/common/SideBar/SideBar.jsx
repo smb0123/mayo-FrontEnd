@@ -22,7 +22,7 @@ export default function SideBar() {
     <div className={cn('container')}>
       <header className={cn('header')}></header>
       <div className={cn('gridBox')}>
-        <Link href={ROUTE.HOME} className={cn('inProcessBox', { onPage: pathName === '/' })}>
+        <Link href={ROUTE.In_Progress} className={cn('inProcessBox', { onPage: pathName === '/in-progress' })}>
           <InProcess height={50} width={50} />
           <p>처리중</p>
         </Link>
