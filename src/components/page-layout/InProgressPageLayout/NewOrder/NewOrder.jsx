@@ -8,6 +8,7 @@ import getNewOrder from '@/components/common/Order/api/getNewOrder';
 import { useQuery } from '@tanstack/react-query';
 import { OrderContext } from '../InProgressPageLayout';
 import { useContext, useEffect, useState } from 'react';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
@@ -16,61 +17,63 @@ export default function NewOrder() {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const test = 'VQtTGTCc13EWulU5sZmI';
+  const { storeId } = useStoreId();
   const { data } = useQuery({
     queryKey: ['newOrder'],
-    queryFn: () => getNewOrder(test),
+    queryFn: () => getNewOrder(storeId),
+    enabled: !!storeId,
   });
 
-  // useEffect(() => {
-  //   let eventSource;
-  //   let lastEventId = '';
+  useEffect(() => {
+    let eventSource;
+    let lastEventId = '';
 
-  //   const connectSSE = () => {
-  //     eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${test}`);
+    const connectSSE = () => {
+      eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}`);
 
-  //     eventSource.addEventListener('notification', (event) => {
-  //       const newNotification = event.data;
-  //       let parsedData;
+      eventSource.addEventListener('notification', (event) => {
+        const newNotification = event.data;
+        let parsedData;
 
-  //       try {
-  //         parsedData = JSON.parse(newNotification);
-  //       } catch (error) {
-  //         return;
-  //       }
+        try {
+          parsedData = JSON.parse(newNotification);
+        } catch (error) {
+          return;
+        }
 
-  //       setNotifications((prevNotifications) => [...prevNotifications, parsedData]);
-  //       lastEventId = event.lastEventId;
-  //     });
+        setNotifications((prevNotifications) => [...prevNotifications, parsedData]);
+        lastEventId = event.lastEventId;
+      });
 
-  //     eventSource.onerror = (error) => {
-  //       console.error('SSE error:', error);
-  //       setError('연결에 실패했습니다. 재연결 중...');
-  //       setIsConnected(false);
-  //       eventSource.close();
-  //       setTimeout(connectSSE, 5000); // 5초 후 재연결 시도
-  //     };
+      eventSource.onerror = (error) => {
+        console.error('SSE error:', error);
+        setError('연결에 실패했습니다. 재연결 중...');
+        setIsConnected(false);
+        eventSource.close();
+        setTimeout(connectSSE, 5000); // 5초 후 재연결 시도
+      };
 
-  //     eventSource.onopen = () => {
-  //       setError(null);
-  //       setIsConnected(true);
-  //       console.log('SSE 연결 성공');
-  //     };
-  //   };
+      eventSource.onopen = () => {
+        setError(null);
+        setIsConnected(true);
+        console.log('SSE 연결 성공');
+      };
+    };
 
-  //   connectSSE(); // SSE 연결 시도
+    connectSSE(); // SSE 연결 시도
 
-  //   return () => {
-  //     if (eventSource) {
-  //       eventSource.close();
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [storeId]);
+  console.log(notifications);
 
-  // console.log(notifications);
   return (
     <div className={cn('container')}>
       <header className={cn('header')}>신규 {data?.length}건</header>
+      <div>{notifications}</div>
       <div className={cn('newDetailOrderBox')}>
         {data?.length > 0 ? (
           data.map((order, id) => (
