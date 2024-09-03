@@ -1,5 +1,5 @@
 "use client";
-import styles from '@/app/my-page/store-info/page.module.scss';
+import styles from './page.module.scss';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 import
@@ -13,6 +13,15 @@ export default function StoreInfo() {
   const [discountHours, setDiscountHours] = useState({ start: '', end: '' });
   const [additionalComment, setAdditionalComment] = useState('');
   const [error, setError] = useState(null);
+
+  // 유효성 검사 에러 상태 관리
+  const [validationErrors, setValidationErrors] = useState({
+    storeName: '',
+    storeAddress: '',
+    storeNumber: '',
+    openingHours: '',
+    discountHours: '',
+  });
 
   // 사용자 정보 가져오기
   useEffect(() => {
@@ -60,7 +69,40 @@ export default function StoreInfo() {
     fetchStoreData();
   }, [storeId]);
 
+  const validateInputs = () => {
+    let errors = {};
+
+    if (!storeName.trim()) {
+      errors.storeName = '상점명을 입력해주세요.';
+    }
+
+    if (!storeAddress.trim()) {
+      errors.storeAddress = '가게 주소를 입력해주세요.';
+    }
+
+    if (!storeNumber.trim() || !/^\d{2,3}-\d{3,4}-\d{4}$/.test(storeNumber)) {
+      errors.storeNumber = '올바른 가게 번호를 입력해주세요. (예: 010-1234-5678)';
+    }
+
+    if (!openingHours.open.trim() || !openingHours.close.trim()) {
+      errors.openingHours = '영업시간을 정확히 입력해주세요.';
+    }
+
+    if (!discountHours.start.trim() || !discountHours.end.trim()) {
+      errors.discountHours = '할인시간을 정확히 입력해주세요.';
+    }
+
+    setValidationErrors(errors);
+
+    return Object.keys(errors).length === 0; // 에러가 없으면 true 반환
+  };
+
   const handleSave = async () => {
+    if (!validateInputs()) {
+      alert('입력값을 확인해주세요.');
+      return;
+    }
+
     try {
       const response = await axiosInstance.put(`/stores`, {
         storeId: storeId,
@@ -100,18 +142,24 @@ export default function StoreInfo() {
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
           />
+          {validationErrors.storeName && <div className={styles.error}>{validationErrors.storeName}</div>}
+          
           <label>가게 주소</label>
           <input
             type="text"
             value={storeAddress}
             onChange={(e) => setStoreAddress(e.target.value)}
           />
+          {validationErrors.storeAddress && <div className={styles.error}>{validationErrors.storeAddress}</div>}
+          
           <label>가게 번호</label>
           <input
             type="text"
             value={storeNumber}
             onChange={(e) => setStoreNumber(e.target.value)}
           />
+          {validationErrors.storeNumber && <div className={styles.error}>{validationErrors.storeNumber}</div>}
+          
           <label>영업시간</label>
           <div className={styles.timeInput}>
             <input
@@ -132,6 +180,8 @@ export default function StoreInfo() {
               }
             />
           </div>
+          {validationErrors.openingHours && <div className={styles.error}>{validationErrors.openingHours}</div>}
+          
           <label>할인시간</label>
           <div className={styles.timeInput}>
             <input
@@ -152,6 +202,7 @@ export default function StoreInfo() {
               }
             />
           </div>
+          {validationErrors.discountHours && <div className={styles.error}>{validationErrors.discountHours}</div>}
         </div>
         <div className={styles.noticeBoard}>
           <div className={styles.noticeTitle}>공지사항</div>
