@@ -121,7 +121,7 @@ export default function MainPageLayout() {
   return (
     <div className={cn('loginContainer')}>
       <div className={cn('logoContainer')}>
-        <Logo className={cn('logo')} />
+        <Logo width={150} height={67} className={cn('logo')} />
         <h2 className={cn('subTitle')}>사장님용</h2>
       </div>
       <form className={cn('inputContainer')} onSubmit={handleEmailLogin} onKeyDown={handleKeyDown}>
