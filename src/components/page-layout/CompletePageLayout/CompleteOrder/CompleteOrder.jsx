@@ -5,8 +5,7 @@ import Order from '@/components/common/Order/Order';
 import { useContext, useEffect, useState } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
@@ -18,7 +17,6 @@ export default function CompleteOrder() {
   const { setOrderId } = useContext(CompleteOrderContext);
   const { storeId } = useStoreId();
 
-  // const date = '2024-08-19T12:00:00Z';
   const orderArray = [];
   const [isDateButtonClick, setIsDateButtonClick] = useState(false);
   const [date, setDate] = useState();
@@ -45,7 +43,6 @@ export default function CompleteOrder() {
     // @ts-ignore
     setNowDate(moment(selectedDate).format('YYYY-MM-DD'));
   };
-  console.log(date);
 
   return (
     <div className={cn('container')}>
