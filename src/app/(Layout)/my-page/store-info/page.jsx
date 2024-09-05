@@ -72,28 +72,40 @@ export default function StoreInfo() {
   const validateInputs = () => {
     let errors = {};
 
+    // 상점명 유효성 검사
     if (!storeName.trim()) {
       errors.storeName = '상점명을 입력해주세요.';
     }
 
+    // 가게 주소 유효성 검사
     if (!storeAddress.trim()) {
       errors.storeAddress = '가게 주소를 입력해주세요.';
     }
 
-    if (!storeNumber.trim() || !/^\d{2,3}-\d{3,4}-\d{4}$/.test(storeNumber)) {
+    // 가게 번호 유효성 검사 (전화번호 형식)
+    const phoneRegex = /^\d{2,3}-\d{3,4}-\d{4}$/;
+    if (!storeNumber.trim() || !phoneRegex.test(storeNumber)) {
       errors.storeNumber = '올바른 가게 번호를 입력해주세요. (예: 010-1234-5678)';
     }
 
-    if (!openingHours.open.trim() || !openingHours.close.trim()) {
-      errors.openingHours = '영업시간을 정확히 입력해주세요.';
+    // 영업시간 유효성 검사
+    const timeRegex = /^([01]?\d|2[0-3]):([0-5]\d)$/; // HH:mm 형식
+    if (!openingHours.open.trim() || !timeRegex.test(openingHours.open)) {
+      errors.openingHours = '영업 시작 시간을 올바르게 입력해주세요. (예: 09:00)';
+    }
+    if (!openingHours.close.trim() || !timeRegex.test(openingHours.close)) {
+      errors.openingHours = '영업 종료 시간을 올바르게 입력해주세요. (예: 18:00)';
     }
 
-    if (!discountHours.start.trim() || !discountHours.end.trim()) {
-      errors.discountHours = '할인시간을 정확히 입력해주세요.';
+    // 할인시간 유효성 검사
+    if (!discountHours.start.trim() || !timeRegex.test(discountHours.start)) {
+      errors.discountHours = '할인 시작 시간을 올바르게 입력해주세요. (예: 10:00)';
+    }
+    if (!discountHours.end.trim() || !timeRegex.test(discountHours.end)) {
+      errors.discountHours = '할인 종료 시간을 올바르게 입력해주세요. (예: 17:00)';
     }
 
     setValidationErrors(errors);
-
     return Object.keys(errors).length === 0; // 에러가 없으면 true 반환
   };
 
