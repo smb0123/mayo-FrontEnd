@@ -21,6 +21,7 @@ export default function StoreInfo() {
     storeNumber: '',
     openingHours: '',
     discountHours: '',
+    additionalComment: '',
   });
 
   // 사용자 정보 가져오기
@@ -75,17 +76,21 @@ export default function StoreInfo() {
     // 상점명 유효성 검사
     if (!storeName.trim()) {
       errors.storeName = '상점명을 입력해주세요.';
+    } else if (storeName.length > 15) {
+      errors.storeName = '상점명은 15글자 이하로 입력해주세요.';
     }
 
     // 가게 주소 유효성 검사
     if (!storeAddress.trim()) {
       errors.storeAddress = '가게 주소를 입력해주세요.';
+    } else if (storeAddress.length > 35) {
+      errors.storeAddress = '가게 주소는 35글자 이하로 입력해주세요.';
     }
 
     // 가게 번호 유효성 검사 (전화번호 형식)
-    const phoneRegex = /^\d{2,3}-\d{3,4}-\d{4}$/;
+    const phoneRegex = /^(02|\d{3,4})-\d{3,4}-\d{4}$/; // '0252-5525-4562'와 같은 번호 허용
     if (!storeNumber.trim() || !phoneRegex.test(storeNumber)) {
-      errors.storeNumber = '올바른 가게 번호를 입력해주세요. (예: 010-1234-5678)';
+      errors.storeNumber = '올바른 가게 번호를 입력해주세요. (예: 010-1234-5678 또는 0252-5525-4562)';
     }
 
     // 영업시간 유효성 검사
@@ -103,6 +108,11 @@ export default function StoreInfo() {
     }
     if (!discountHours.end.trim() || !timeRegex.test(discountHours.end)) {
       errors.discountHours = '할인 종료 시간을 올바르게 입력해주세요. (예: 17:00)';
+    }
+
+    // 공지사항 유효성 검사 (300자 이하)
+    if (additionalComment.length > 300) {
+      errors.additionalComment = '공지사항은 최대 300자까지 입력 가능합니다.';
     }
 
     setValidationErrors(errors);
@@ -223,6 +233,7 @@ export default function StoreInfo() {
             value={additionalComment}
             onChange={(e) => setAdditionalComment(e.target.value)}
           />
+          {validationErrors.additionalComment && <div className={styles.error}>{validationErrors.additionalComment}</div>}
         </div>
       </div>
       <div className={styles.buttons}>
