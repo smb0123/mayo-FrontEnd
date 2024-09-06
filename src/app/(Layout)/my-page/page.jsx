@@ -12,7 +12,7 @@ export default function MainPage() {
       const auth = getAuth(); // Firebase에서 auth 객체를 가져옵니다.
       await signOut(auth); // Firebase signOut 함수 호출
       alert('로그아웃 되었습니다.');
-      router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
+      router.push('/'); // 로그아웃 후 로그인 페이지로 리다이렉트
     } catch (error) {
       console.log(error);
       alert('로그아웃 중 오류가 발생했습니다.'); // 오류 발생 시 표시할 메시지

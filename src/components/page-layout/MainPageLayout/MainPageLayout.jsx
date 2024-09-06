@@ -13,6 +13,8 @@ import {
   signInWithEmailAndPassword,
   OAuthProvider,
   getRedirectResult,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
@@ -76,6 +78,8 @@ export default function MainPageLayout() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
+      // 로그인 지속성을 설정하여 로그인이 유지
+      await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
       await checkUserPermissions(token); // 사용자 권한 검증
@@ -91,6 +95,7 @@ export default function MainPageLayout() {
     provider.addScope('name'); // 애플 로그인에서 이름을 요청
 
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
       await checkUserPermissions(token); // 사용자 권한 검증
@@ -103,6 +108,7 @@ export default function MainPageLayout() {
   const handleEmailLogin = async (e) => {
     e.preventDefault(); // 기본 폼 제출 방지
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithEmailAndPassword(auth, email, password);
       const token = await result.user.getIdToken();
       await checkUserPermissions(token); // 사용자 권한 검증
