@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import styles from '@/components/page-layout/CompletePageLayout/CompleteOrder/CompleteOrder.module.scss';
 import Order from '@/components/common/Order/Order';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -39,8 +39,13 @@ export default function CompleteOrder() {
     setIsDateButtonClick((prev) => !prev);
     // @ts-ignore
     setNowDate(moment(selectedDate).format('YYYY-MM-DD'));
-    queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
   };
+
+  useEffect(() => {
+    if (nowDate) {
+      queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
+    }
+  }, [nowDate, queryClient]);
 
   return (
     <div className={cn('container')}>
