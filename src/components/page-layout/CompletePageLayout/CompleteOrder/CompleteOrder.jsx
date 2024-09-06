@@ -33,8 +33,6 @@ export default function CompleteOrder() {
   };
 
   const handleDateChange = (selectedDate) => {
-    queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
-
     setDate(selectedDate);
     setIsDateButtonClick((prev) => !prev);
     // @ts-ignore
