@@ -6,15 +6,15 @@ import styles from '@/components/common/Header/Header.module.scss';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import getStoreInfo from '@/components/common/Header/apis/getStoreInfo';
+import useStoreId from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function Header() {
   const [currentDateTime, setCurrentDateTime] = useState('');
+  const { storeId } = useStoreId();
 
-  const storeId = 'VQtTGTCc13EWulU5sZmI';
-
-  const { data, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: ['storeStatus'],
     queryFn: () => getStoreInfo(storeId),
   });
@@ -33,6 +33,7 @@ export default function Header() {
       };
 
       const formattedDateTime = now
+        // @ts-ignore
         .toLocaleString('ko-KR', options)
         .replace(/(\d{2})\/(\d{2})/, '$2.$1')
         .replace(' ', ' ');
