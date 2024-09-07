@@ -100,7 +100,7 @@ export default function CompleteDetailOrder() {
         </div>
       ) : (
         <div className={cn('noOrderContainer')}>
-          <p className={cn('noOrder')}>주문을 클릭해주세요</p>
+          <p className={cn('noOrder')}>날짜를 선택해주세요</p>
         </div>
       )}
     </>

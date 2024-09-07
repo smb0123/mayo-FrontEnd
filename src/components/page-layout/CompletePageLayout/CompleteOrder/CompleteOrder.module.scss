@@ -28,18 +28,6 @@
   padding: 1rem;
 }
 
-.calendar {
-  position: absolute;
-  right: 0;
-  top: 7rem;
-  width: 50rem;
-  height: 30rem;
-
-  .react-calendar {
-    max-width: none;
-  }
-}
-
 .completeDetailOrderBox {
   background-color: #0e0e0e;
   height: 100%;

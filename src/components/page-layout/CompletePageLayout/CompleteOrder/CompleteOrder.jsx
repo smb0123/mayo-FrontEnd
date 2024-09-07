@@ -5,12 +5,11 @@ import Order from '@/components/common/Order/Order';
 import { useContext, useEffect, useState } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
-import Calendar from 'react-calendar';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import useStoreId from '@/store/useStoreId';
+import CalendarCustom from './CalendarCustom/CalendarCustom';
 
 const cn = classNames.bind(styles);
 
@@ -18,8 +17,6 @@ export default function CompleteOrder() {
   const { setOrderId } = useContext(CompleteOrderContext);
   const { storeId } = useStoreId();
 
-  // const date = '2024-08-19T12:00:00Z';
-  const orderArray = [];
   const [isDateButtonClick, setIsDateButtonClick] = useState(false);
   const [date, setDate] = useState();
   const [nowDate, setNowDate] = useState(null);
@@ -31,40 +28,41 @@ export default function CompleteOrder() {
     enabled: !!nowDate,
   });
 
-  data?.pages.map((order) => order.content.map((detailOrder) => orderArray.push(detailOrder)));
-
   const handleDateButtonClick = () => {
     setIsDateButtonClick((prev) => !prev);
   };
 
   const handleDateChange = (selectedDate) => {
-    queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
-
     setDate(selectedDate);
     setIsDateButtonClick((prev) => !prev);
     // @ts-ignore
     setNowDate(moment(selectedDate).format('YYYY-MM-DD'));
   };
-  console.log(date);
+
+  useEffect(() => {
+    if (nowDate) {
+      queryClient.invalidateQueries({ queryKey: ['doneOrder'] });
+    }
+  }, [nowDate, queryClient]);
 
   return (
     <div className={cn('container')}>
       <header className={cn('headerBox')}>
-        <p className={cn('header')}>완료 {orderArray.length}건</p>
+        <p className={cn('header')}>완료 {data?.length}건</p>
         <p className={cn('nowDate')}>{nowDate}</p>
         <button onClick={handleDateButtonClick} className={cn('dateButton')}>
           날짜 선택
         </button>
-        {isDateButtonClick && <Calendar className={cn('calendar')} onChange={handleDateChange} value={date}></Calendar>}
+        {isDateButtonClick && <CalendarCustom onChange={handleDateChange} value={date} />}
       </header>
       <div className={cn('completeDetailOrderBox')}>
-        {orderArray ? (
-          orderArray?.map((order, idx) => (
+        {data ? (
+          data?.map((order, idx) => (
             <Order
               key={idx}
               menu={order.firstItemName}
               date={order.createdAt.seconds}
-              id={order.id}
+              id={order.reservationId}
               orderStatus="done"
               setOrderId={setOrderId}
               setOrderStatus={false}

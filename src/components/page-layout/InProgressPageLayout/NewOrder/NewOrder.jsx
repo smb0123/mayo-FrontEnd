@@ -16,8 +16,9 @@ export default function NewOrder() {
   const { setOrderId, setOrderStatus } = useContext(OrderContext);
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
   const { storeId } = useStoreId();
+  const alarmSound = new Audio('/mp3/alarm.mp3');
+
   const { data } = useQuery({
     queryKey: ['newOrder'],
     queryFn: () => getNewOrder(storeId),
@@ -31,15 +32,21 @@ export default function NewOrder() {
     const connectSSE = () => {
       eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}`);
 
-      eventSource.addEventListener('notification', (event) => {
-        const newNotification = event.data;
+      eventSource.addEventListener('new-reservation', (event) => {
+        let newNotification = event.data;
         let parsedData;
-
+        alarmSound.play();
+        // console.log(newNotification.split('Response')[1]);
+        console.log(newNotification);
+        newNotification = newNotification.split('Response')[1];
         try {
           parsedData = JSON.parse(newNotification);
         } catch (error) {
+          console.log(error);
           return;
         }
+
+        console.log(typeof parsedData);
 
         setNotifications((prevNotifications) => [...prevNotifications, parsedData]);
         lastEventId = event.lastEventId;
@@ -48,19 +55,17 @@ export default function NewOrder() {
       eventSource.onerror = (error) => {
         console.error('SSE error:', error);
         setError('연결에 실패했습니다. 재연결 중...');
-        setIsConnected(false);
         eventSource.close();
-        setTimeout(connectSSE, 5000); // 5초 후 재연결 시도
+        setTimeout(connectSSE, 5000);
       };
 
       eventSource.onopen = () => {
         setError(null);
-        setIsConnected(true);
         console.log('SSE 연결 성공');
       };
     };
 
-    connectSSE(); // SSE 연결 시도
+    connectSSE();
 
     return () => {
       if (eventSource) {
@@ -68,7 +73,6 @@ export default function NewOrder() {
       }
     };
   }, [storeId]);
-  console.log(notifications);
 
   return (
     <div className={cn('container')}>
