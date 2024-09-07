@@ -1,5 +1,5 @@
-"use client";
-import styles from '@/app/my-page/notification-settings/page.module.scss';
+'use client';
+import styles from '@/app/(Layout)/my-page/notification-settings/page.module.scss';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -9,10 +9,11 @@ export default function Notification() {
   const toggleNotification = () => {
     setIsNotificationEnabled(!isNotificationEnabled);
   };
-  
-  return <div className={styles.container}>
-    <div className={styles.content}>
-      <div className={styles.mainContent}>
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.mainContent}>
           <div className={styles.title}>알림 설정</div>
           <div className={styles.notificationBox}>
             <p>알림 설정</p>
@@ -26,5 +27,6 @@ export default function Notification() {
           </Link>
         </div>
       </div>
-  </div>;
+    </div>
+  );
 }
