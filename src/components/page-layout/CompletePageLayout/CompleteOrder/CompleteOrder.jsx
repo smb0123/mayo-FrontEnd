@@ -8,7 +8,7 @@ import getDoneOrder from './api/getDoneOrder';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import useStoreId from '@/store/useStoreId';
+import { useStoreId } from '@/store/useStoreId';
 import CalendarCustom from './CalendarCustom/CalendarCustom';
 
 const cn = classNames.bind(styles);

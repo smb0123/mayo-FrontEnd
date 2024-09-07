@@ -8,7 +8,7 @@ import Order from '@/components/common/Order/Order';
 import getInProgressOrder from '@/components/common/Order/api/getInProgressOrder';
 import { useContext } from 'react';
 import { OrderContext } from '../InProgressPageLayout';
-import useStoreId from '@/store/useStoreId';
+import { useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
