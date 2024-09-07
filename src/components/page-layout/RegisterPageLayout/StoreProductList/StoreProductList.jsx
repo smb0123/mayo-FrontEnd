@@ -9,7 +9,7 @@ import StoreProduct from '@/components/common/StoreProduct/StoreProduct';
 import putStoreOpen from './apis/putStoreOpen';
 import { useEffect, useState } from 'react';
 import putStoreClose from './apis/putStoreClose';
-import useStoreId from '@/store/useStoreId';
+import { useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 

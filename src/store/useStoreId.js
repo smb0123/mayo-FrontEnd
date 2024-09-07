@@ -13,4 +13,28 @@ const useStoreId = create(
   )
 );
 
-export default useStoreId;
+const useUserId = create(
+  persist(
+    (set) => ({
+      userId: null,
+      setUserId: (userId) => set({ userId: userId }),
+    }),
+    {
+      name: 'userId',
+    }
+  )
+);
+
+const useAlarm = create(
+  persist(
+    (set) => ({
+      alarm: null,
+      setAlarm: (alarm) => set({ alarm: alarm }),
+    }),
+    {
+      name: 'alarm',
+    }
+  )
+);
+
+export { useStoreId, useUserId, useAlarm };

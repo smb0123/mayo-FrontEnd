@@ -6,7 +6,7 @@ import styles from '@/components/common/Header/Header.module.scss';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import getStoreInfo from '@/components/common/Header/apis/getStoreInfo';
-import useStoreId from '@/store/useStoreId';
+import { useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
