@@ -21,12 +21,13 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
-import storeId from '@/store/useStoreId';
+import { useStoreId, useUserId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function MainPageLayout() {
-  const { setStoreId } = storeId();
+  const { setStoreId } = useStoreId();
+  const { setUserId } = useUserId();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,6 +48,7 @@ export default function MainPageLayout() {
         }
 
         setStoreId(userData.storeRef);
+        setUserId(userData.userid);
 
         alert('로그인에 성공하였습니다.');
         router.push(ROUTE.In_Progress);
@@ -55,17 +57,16 @@ export default function MainPageLayout() {
         console.error('로그인 조건 검증 실패:', error);
       }
     },
-    [router, setStoreId]
+    [router, setStoreId, setUserId]
   );
 
   useEffect(() => {
-    // 리디렉션 결과 처리
     const checkRedirectResult = async () => {
       try {
         const result = await getRedirectResult(auth);
         if (result) {
           const token = await result.user.getIdToken();
-          await checkUserPermissions(token); // 사용자 권한 검증
+          await checkUserPermissions(token);
         }
       } catch (error) {
         console.error('리디렉션 결과 처리 중 오류 발생:', error);
@@ -78,11 +79,10 @@ export default function MainPageLayout() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      // 로그인 지속성을 설정하여 로그인이 유지
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-      await checkUserPermissions(token); // 사용자 권한 검증
+      await checkUserPermissions(token);
     } catch (error) {
       alert('Google 로그인에 실패하였습니다. 다시 시도해주세요.');
       console.error('Google 로그인 실패:', error);
@@ -91,14 +91,14 @@ export default function MainPageLayout() {
 
   const handleAppleLogin = async () => {
     const provider = new OAuthProvider('apple.com');
-    provider.addScope('email'); // 애플 로그인에서 이메일을 요청
-    provider.addScope('name'); // 애플 로그인에서 이름을 요청
+    provider.addScope('email');
+    provider.addScope('name');
 
     try {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-      await checkUserPermissions(token); // 사용자 권한 검증
+      await checkUserPermissions(token);
     } catch (error) {
       alert('Apple 로그인에 실패하였습니다. 다시 시도해주세요.');
       console.error('Apple 로그인 실패:', error);
@@ -106,12 +106,12 @@ export default function MainPageLayout() {
   };
 
   const handleEmailLogin = async (e) => {
-    e.preventDefault(); // 기본 폼 제출 방지
+    e.preventDefault();
     try {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithEmailAndPassword(auth, email, password);
       const token = await result.user.getIdToken();
-      await checkUserPermissions(token); // 사용자 권한 검증
+      await checkUserPermissions(token);
     } catch (error) {
       alert('로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요.');
       console.error('이메일 로그인 실패:', error);
@@ -120,7 +120,7 @@ export default function MainPageLayout() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleEmailLogin(e); // Enter 키를 누르면 로그인 시도
+      handleEmailLogin(e);
     }
   };
 
@@ -149,9 +149,6 @@ export default function MainPageLayout() {
           <button type="submit" className={cn('loginButton')}>
             로그인
           </button>
-          {/* <button type="button" className={cn('registerButton')}>
-            회원가입
-          </button> */}
         </div>
       </form>
       <div className={cn('socialLoginContainer')}>
