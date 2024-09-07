@@ -36,7 +36,6 @@ export default function NewOrder() {
         let newNotification = event.data;
         let parsedData;
         alarmSound.play();
-        // console.log(newNotification.split('Response')[1]);
         console.log(newNotification);
         newNotification = newNotification.split('Response')[1];
         try {
