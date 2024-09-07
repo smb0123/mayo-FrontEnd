@@ -15,7 +15,7 @@ const cn = classNames.bind(styles);
 export default function NewOrder() {
   const { setOrderId, setOrderStatus } = useContext(OrderContext);
   const [notifications, setNotifications] = useState([]);
-  const [, setError] = useState(null);
+  const [error, setError] = useState(null);
   const { storeId } = useStoreId();
   const alarmSound = new Audio('/mp3/alarm.mp3');
 
