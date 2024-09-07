@@ -6,10 +6,10 @@ import { useContext, useEffect, useState } from 'react';
 import { CompleteOrderContext } from '../CompletePageLayout';
 import getDoneOrder from './api/getDoneOrder';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import useStoreId from '@/store/useStoreId';
+import CalendarCustom from './CalendarCustom/CalendarCustom';
 
 const cn = classNames.bind(styles);
 
@@ -53,7 +53,7 @@ export default function CompleteOrder() {
         <button onClick={handleDateButtonClick} className={cn('dateButton')}>
           날짜 선택
         </button>
-        {isDateButtonClick && <Calendar className={cn('calendar')} onChange={handleDateChange} value={date}></Calendar>}
+        {isDateButtonClick && <CalendarCustom onChange={handleDateChange} value={date} />}
       </header>
       <div className={cn('completeDetailOrderBox')}>
         {data ? (
