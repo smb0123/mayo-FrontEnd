@@ -13,4 +13,16 @@ const useStoreId = create(
   )
 );
 
-export default useStoreId;
+const useUserId = create(
+  persist(
+    (set) => ({
+      userId: null,
+      setUserId: (userId) => set({ userId: userId }),
+    }),
+    {
+      name: 'userId',
+    }
+  )
+);
+
+export { useStoreId, useUserId };
