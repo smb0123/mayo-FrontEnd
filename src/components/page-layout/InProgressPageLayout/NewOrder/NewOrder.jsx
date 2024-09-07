@@ -8,26 +8,31 @@ import getNewOrder from '@/components/common/Order/api/getNewOrder';
 import { useQuery } from '@tanstack/react-query';
 import { OrderContext } from '../InProgressPageLayout';
 import { useContext, useEffect, useState } from 'react';
-import { useStoreId } from '@/store/useStoreId';
+import { useAlarm, useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function NewOrder() {
   const { setOrderId, setOrderStatus } = useContext(OrderContext);
   const { storeId } = useStoreId();
+  const { alarm } = useAlarm();
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['newOrder'],
     queryFn: () => getNewOrder(storeId),
     enabled: !!storeId,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [alarm]);
 
   return (
     <div className={cn('container')}>
       <header className={cn('header')}>신규 {data?.length}건</header>
       <div className={cn('newDetailOrderBox')}>
         {data?.length > 0 ? (
-          data.map((order, id) => (
+          data?.map((order, id) => (
             <Order
               key={id}
               menu={order.firstItemName}
