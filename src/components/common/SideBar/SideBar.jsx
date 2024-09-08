@@ -11,16 +11,76 @@ import MyPage from '@/icons/my_page.svg';
 import Logo from '@/icons/logo.svg';
 import Link from 'next/link';
 import ROUTE from '@/constants/route';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useStoreId, useUserId, useAlarm } from '@/store/useStoreId';
+import Alarm from '@/icons/alarm.svg';
+import AlarmOff from '@/icons/alarm_off.svg';
 
 const cn = classNames.bind(styles);
 
 export default function SideBar() {
+  const alarmSoundRef = useRef(null);
+  const [canPlaySound, setCanPlaySound] = useState(false);
   const pathName = usePathname();
+  const { storeId } = useStoreId();
+  const { userId } = useUserId();
+  const { setAlarm } = useAlarm();
+
+  useEffect(() => {
+    alarmSoundRef.current = new Audio('/mp3/alarm.mp3');
+  }, []);
+
+  useEffect(() => {
+    let eventSource;
+
+    const connectSSE = () => {
+      eventSource = new EventSource(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}&userId=${userId}`
+      );
+
+      eventSource.addEventListener('new-reservation', (event) => {
+        let Notification = event.data;
+        const newNotification = JSON.parse(Notification);
+
+        if (canPlaySound) {
+          alarmSoundRef.current.play().catch((error) => {
+            console.log('알람 재생 오류:', error);
+          });
+        }
+
+        setAlarm(newNotification);
+      });
+
+      eventSource.onerror = (error) => {
+        console.error('SSE error:', error);
+        eventSource.close();
+        setTimeout(connectSSE, 5000);
+      };
+
+      eventSource.onopen = () => {
+        console.log('SSE 연결 성공');
+      };
+    };
+
+    connectSSE();
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [storeId, userId, canPlaySound]);
 
   return (
     <div className={cn('container')}>
-      <header className={cn('header')}></header>
+      <header className={cn('header')}>
+        {canPlaySound ? (
+          <Alarm onClick={() => setCanPlaySound(false)} width={50} height={50} className={cn('alarm')} />
+        ) : (
+          <AlarmOff onClick={() => setCanPlaySound(true)} width={50} height={50} className={cn('alarm')} />
+        )}
+      </header>
       <div className={cn('gridBox')}>
         <Link href={ROUTE.In_Progress} className={cn('inProcessBox', { onPage: pathName === '/in-progress' })}>
           <InProcess height={50} width={50} />
