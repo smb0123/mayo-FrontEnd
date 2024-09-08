@@ -171,7 +171,7 @@ export default function Modal({
             />
             {validationErrors.salePercent && <div className={styles.error}>{validationErrors.salePercent}</div>}
           </div>
-          
+
           <div className={styles.inputGroup}>
             <label htmlFor="itemQuantity">재고 수량</label>
             <input
@@ -212,7 +212,7 @@ export default function Modal({
           <button onClick={onDelete} className={styles.deleteButton}>
             메뉴 삭제
           </button>
-          <button onClick={handleSave} className={styles.saveButton}>
+          <button onClick={onSave} className={styles.saveButton}>
             저장
           </button>
         </div>
