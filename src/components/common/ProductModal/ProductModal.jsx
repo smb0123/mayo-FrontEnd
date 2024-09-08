@@ -80,7 +80,7 @@ export default function Modal({
       alert('입력값을 확인해주세요.');
       return;
     }
-
+    
     onSave();
   };
 
@@ -204,7 +204,7 @@ export default function Modal({
               value={newProduct.additionalInformation || ''}
               onChange={handleInputChange}
             />
-            
+
           </div>
         </div>
 
@@ -212,7 +212,7 @@ export default function Modal({
           <button onClick={onDelete} className={styles.deleteButton}>
             메뉴 삭제
           </button>
-          <button onClick={onSave} className={styles.saveButton}>
+          <button onClick={handleSave} className={styles.saveButton}>
             저장
           </button>
         </div>
