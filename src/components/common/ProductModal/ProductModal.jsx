@@ -1,13 +1,29 @@
 import styles from './ProductModal.module.scss';
 import { useState, useEffect, useRef } from 'react';
 
-export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange, handleImageChange }) {
+export default function Modal({
+  isOpen,
+  onClose,
+  onSave,
+  onDelete,
+  newProduct,
+  handleInputChange,
+  handleImageChange,
+}) {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
+  const [validationErrors, setValidationErrors] = useState({
+    itemName: '',
+    itemDescription: '',
+    originalPrice: '',
+    salePrice: '',
+    salePercent: '',
+    cookingTime: '',
+  });
+
   useEffect(() => {
     if (newProduct) {
-      // If the itemImage is a string (URL), use it directly; otherwise, create an object URL
       if (typeof newProduct.itemImage === 'string') {
         setImagePreview(newProduct.itemImage);
       } else if (newProduct.itemImage instanceof File) {
@@ -22,6 +38,50 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
 
   const handleImageClick = () => {
     fileInputRef.current.click();
+  };
+
+  const validateInputs = () => {
+    let errors = {};
+
+    if (!newProduct.itemName.trim()) {
+      errors.itemName = '상품명을 입력해주세요.';
+    } else if (newProduct.itemName.length > 15) {
+      errors.itemName = '상품명은 15자 이하로 입력해주세요.';
+    }
+
+    if (!newProduct.itemDescription.trim()) {
+      errors.itemDescription = '상품 설명을 입력해주세요.';
+    } else if (newProduct.itemDescription.length > 200) {
+      errors.itemDescription = '상품 설명은 200자 이하로 입력해주세요.';
+    }
+
+    if (!newProduct.originalPrice) {
+      errors.originalPrice = '원래 가격을 입력해주세요.';
+    }
+
+    if (!newProduct.salePrice) {
+      errors.salePrice = '할인 후 가격을 입력해주세요.';
+    }
+
+    if (!newProduct.salePercent) {
+      errors.salePercent = '할인율을 입력해주세요.';
+    }
+
+    if (!newProduct.cookingTime) {
+      errors.cookingTime = '조리 시간을 입력해주세요.';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0; // 에러가 없으면 true 반환
+  };
+
+  const handleSave = () => {
+    if (!validateInputs()) {
+      alert('입력값을 확인해주세요.');
+      return;
+    }
+    
+    onSave();
   };
 
   return (
@@ -62,6 +122,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.itemName || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.itemName && <div className={styles.error}>{validationErrors.itemName}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -72,6 +133,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.itemDescription || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.itemDescription && <div className={styles.error}>{validationErrors.itemDescription}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -83,6 +145,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.originalPrice || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.originalPrice && <div className={styles.error}>{validationErrors.originalPrice}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -94,6 +157,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.salePrice || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.salePrice && <div className={styles.error}>{validationErrors.salePrice}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -105,6 +169,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.salePercent || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.salePercent && <div className={styles.error}>{validationErrors.salePercent}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -127,6 +192,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.cookingTime || ''}
               onChange={handleInputChange}
             />
+            {validationErrors.cookingTime && <div className={styles.error}>{validationErrors.cookingTime}</div>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -138,6 +204,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
               value={newProduct.additionalInformation || ''}
               onChange={handleInputChange}
             />
+
           </div>
         </div>
 
@@ -145,7 +212,7 @@ export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, h
           <button onClick={onDelete} className={styles.deleteButton}>
             메뉴 삭제
           </button>
-          <button onClick={onSave} className={styles.saveButton}>
+          <button onClick={handleSave} className={styles.saveButton}>
             저장
           </button>
         </div>
