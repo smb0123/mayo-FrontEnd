@@ -26,6 +26,7 @@ export default function SideBar() {
   const { storeId } = useStoreId();
   const { userId } = useUserId();
   const { setAlarm } = useAlarm();
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     alarmSoundRef.current = new Audio('/mp3/alarm.mp3');
@@ -35,6 +36,8 @@ export default function SideBar() {
     let eventSource;
 
     const connectSSE = () => {
+      if (retryCount >= 3) return;
+
       eventSource = new EventSource(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}&userId=${userId}`
       );
@@ -56,10 +59,12 @@ export default function SideBar() {
         console.error('SSE error:', error);
         eventSource.close();
         setTimeout(connectSSE, 5000);
+        setRetryCount((prevCount) => prevCount + 1);
       };
 
       eventSource.onopen = () => {
         console.log('SSE 연결 성공');
+        setRetryCount(0);
       };
     };
 
@@ -70,7 +75,7 @@ export default function SideBar() {
         eventSource.close();
       }
     };
-  }, [storeId, userId, canPlaySound]);
+  }, [storeId, userId, canPlaySound, retryCount, setAlarm]);
 
   return (
     <div className={cn('container')}>
