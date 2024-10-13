@@ -2,7 +2,7 @@ const ROUTE = {
   HOME: '/',
   In_Progress: '/in-progress',
   COMPLETE: '/complete',
-  REGISTER: 'register',
+  REGISTER: '/register',
   MY_PAGE: '/my-page',
 };
 
