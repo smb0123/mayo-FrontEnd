@@ -21,7 +21,7 @@ const cn = classNames.bind(styles);
 
 export default function SideBar() {
   const alarmSoundRef = useRef(null);
-  const [canPlaySound, setCanPlaySound] = useState(false);
+  const [canPlaySound, setCanPlaySound] = useState(true);
   const pathName = usePathname();
   const { storeId } = useStoreId();
   const { userId } = useUserId();
@@ -85,7 +85,7 @@ export default function SideBar() {
     <div className={cn('container')}>
       <header className={cn('header')}>
         {canPlaySound ? (
-          <Alarm onClick={() => setCanPlaySound(false)} width={50} height={50} className={cn('alarm')} />
+          <Alarm onClick={() => setCanPlaySound(true)} width={50} height={50} className={cn('alarm')} />
         ) : (
           <AlarmOff onClick={() => setCanPlaySound(true)} width={50} height={50} className={cn('alarm')} />
         )}
