@@ -44,6 +44,10 @@ export default function SideBar() {
 
       eventSource.addEventListener('new-reservation', (event) => {
         let Notification = event.data;
+        if (Notification === 'initialMessage') {
+          return;
+        }
+
         const newNotification = JSON.parse(Notification);
 
         if (canPlaySound) {
@@ -75,7 +79,7 @@ export default function SideBar() {
         eventSource.close();
       }
     };
-  }, [storeId, userId, canPlaySound, retryCount, setAlarm]);
+  }, [storeId, userId]);
 
   return (
     <div className={cn('container')}>
