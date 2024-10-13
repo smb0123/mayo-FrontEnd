@@ -9,12 +9,14 @@ import StoreProduct from '@/components/common/StoreProduct/StoreProduct';
 import putStoreOpen from './apis/putStoreOpen';
 import { useEffect, useState } from 'react';
 import putStoreClose from './apis/putStoreClose';
-import { useStoreId } from '@/store/useStoreId';
+import { useAlarm, useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function StoreProductList() {
   const { storeId } = useStoreId();
+  const { alarm } = useAlarm();
+
   const [count, setCount] = useState([]);
 
   const { data } = useQuery({
@@ -34,6 +36,7 @@ export default function StoreProductList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['StoreProductList', storeId] });
       queryClient.invalidateQueries({ queryKey: ['storeStatus'] });
+      alert('가게가 오픈되었습니다.');
     },
   });
 
@@ -42,6 +45,7 @@ export default function StoreProductList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['StoreProductList', storeId] });
       queryClient.invalidateQueries({ queryKey: ['storeStatus'] });
+      alert('가게가 마감되었습니다.');
     },
   });
 
@@ -53,6 +57,10 @@ export default function StoreProductList() {
   const handleCloseClick = () => {
     storeClosetMutation.mutate(storeId);
   };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['StoreProductList', storeId] });
+  }, [alarm]);
 
   useEffect(() => {
     setCount(quantityList);
