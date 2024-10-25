@@ -36,27 +36,33 @@ export default function SideBar() {
     let eventSource;
 
     const connectSSE = () => {
+      if (!storeId || !userId) {
+        return;
+      }
+
       if (retryCount >= 3) return;
 
       eventSource = new EventSource(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}&userId=${userId}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}sse/reservations-new?storeId=${storeId}&userId=${userId}`,
+        { withCredentials: true }
       );
 
       eventSource.addEventListener('new-reservation', (event) => {
         let Notification = event.data;
-        if (Notification === 'initialMessage') {
+
+        const newNotification = JSON.parse(Notification);
+
+        if (newNotification.data === '연결시작') {
           return;
         }
 
-        const newNotification = JSON.parse(Notification);
+        setAlarm(newNotification);
 
         if (canPlaySound) {
           alarmSoundRef.current.play().catch((error) => {
             console.log('알람 재생 오류:', error);
           });
         }
-
-        setAlarm(newNotification);
       });
 
       eventSource.onerror = (error) => {
