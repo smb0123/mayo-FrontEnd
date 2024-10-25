@@ -15,10 +15,9 @@ import {
   getRedirectResult,
   setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged,
 } from 'firebase/auth';
 import { auth } from '@/firebase';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
@@ -30,7 +29,6 @@ export default function MainPageLayout() {
   const { setStoreId } = useStoreId();
   const { setUserId } = useUserId();
   const router = useRouter();
-  const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -77,18 +75,6 @@ export default function MainPageLayout() {
 
     checkRedirectResult();
   }, [checkUserPermissions]);
-
-  useEffect(() => {
-    // 로그인 상태 변화 감지 및 보호된 페이지 접근 제어
-    const loginstate = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        if (pathname !== ROUTE.HOME) {
-          router.push(ROUTE.HOME);
-        }
-      }
-    });
-    return () => loginstate();
-  }, [router, pathname]);
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
