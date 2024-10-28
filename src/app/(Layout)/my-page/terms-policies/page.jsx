@@ -43,18 +43,15 @@ export default function Terms() {
         <div className={styles.mainContent}>
           <div className={styles.title}>약관 및 정책</div>
           <div className={styles.policyBox}>
-            <div className={styles.policyItem}>
+            <button className={styles.policyItem} onClick={() => fetchData('0YhQlOD7AdwgATAsYrJW')}>
               <p>이용 약관 보기</p>
-              <button onClick={() => fetchData('0YhQlOD7AdwgATAsYrJW')}>전문 보기</button>
-            </div>
-            <div className={styles.policyItem}>
+            </button>
+            <button className={styles.policyItem} onClick={() => fetchData('SsGnm5370wo8YnItGAdW')}>
               <p>개인정보 처리 방침 보기</p>
-              <button onClick={() => fetchData('SsGnm5370wo8YnItGAdW')}>전문 보기</button>
-            </div>
-            <div className={styles.policyItem}>
+            </button>
+            <button className={styles.policyItem} onClick={() => fetchData('CmaSlWy6PMoWAdqrjZrl')}>
               <p>마케팅 정보 보기</p>
-              <button onClick={() => fetchData('CmaSlWy6PMoWAdqrjZrl')}>전문 보기</button>
-            </div>
+            </button>
           </div>
           <div className={styles.buttonContainer}>
             <Link href="/my-page" className={styles.exitButton}>
