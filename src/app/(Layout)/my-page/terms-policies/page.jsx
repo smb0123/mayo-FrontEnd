@@ -56,9 +56,11 @@ export default function Terms() {
               <button onClick={() => fetchData('CmaSlWy6PMoWAdqrjZrl')}>전문 보기</button>
             </div>
           </div>
-          <Link href="/my-page">
-            <button className={styles.exitButton}>뒤로가기</button>
-          </Link>
+          <div className={styles.buttonContainer}>
+            <Link href="/my-page" className={styles.exitButton}>
+              뒤로가기
+            </Link>
+          </div>
         </div>
       </div>
       {isModalOpen && <Modal content={selectedContent} onClose={closeModal} />}
