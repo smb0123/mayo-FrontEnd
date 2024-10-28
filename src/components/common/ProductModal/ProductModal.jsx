@@ -1,15 +1,7 @@
 import styles from './ProductModal.module.scss';
 import { useState, useEffect, useRef } from 'react';
 
-export default function Modal({
-  isOpen,
-  onClose,
-  onSave,
-  onDelete,
-  newProduct,
-  handleInputChange,
-  handleImageChange,
-}) {
+export default function Modal({ isOpen, onClose, onSave, onDelete, newProduct, handleInputChange, handleImageChange }) {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -80,7 +72,7 @@ export default function Modal({
       alert('입력값을 확인해주세요.');
       return;
     }
-    
+
     onSave();
   };
 
@@ -112,7 +104,6 @@ export default function Modal({
               style={{ display: 'none' }} // 파일 입력을 숨김 처리
             />
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="itemName">상품명</label>
             <input
@@ -124,7 +115,6 @@ export default function Modal({
             />
             {validationErrors.itemName && <div className={styles.error}>{validationErrors.itemName}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="itemDescription">상품 설명</label>
             <textarea
@@ -135,7 +125,6 @@ export default function Modal({
             />
             {validationErrors.itemDescription && <div className={styles.error}>{validationErrors.itemDescription}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="originalPrice">원래 가격</label>
             <input
@@ -147,7 +136,6 @@ export default function Modal({
             />
             {validationErrors.originalPrice && <div className={styles.error}>{validationErrors.originalPrice}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="salePrice">할인 후 가격</label>
             <input
@@ -159,7 +147,6 @@ export default function Modal({
             />
             {validationErrors.salePrice && <div className={styles.error}>{validationErrors.salePrice}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="salePercent">할인율 (%)</label>
             <input
@@ -171,7 +158,6 @@ export default function Modal({
             />
             {validationErrors.salePercent && <div className={styles.error}>{validationErrors.salePercent}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="itemQuantity">재고 수량</label>
             <input
@@ -182,7 +168,6 @@ export default function Modal({
               onChange={handleInputChange}
             />
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="cookingTime">조리 시간 (분)</label>
             <input
@@ -194,7 +179,6 @@ export default function Modal({
             />
             {validationErrors.cookingTime && <div className={styles.error}>{validationErrors.cookingTime}</div>}
           </div>
-
           <div className={styles.inputGroup}>
             <label htmlFor="additionalInformation">추가 정보</label>
             <input
@@ -204,12 +188,9 @@ export default function Modal({
               value={newProduct.additionalInformation || ''}
               onChange={handleInputChange}
             />
-
           </div>
         </div>
-
         <div className={styles.modalButtons}>
-          {/* `newProduct.itemId`가 있을 때만 삭제 버튼을 표시 */}
           {newProduct.itemId && (
             <button onClick={onDelete} className={styles.deleteButton}>
               메뉴 삭제
