@@ -3,13 +3,13 @@
   height: 100%;
 }
 
-
 .content {
   width: 100%;
-  background-color: #F8F8F8;
-  padding: 30px;
+  background-color: #f8f8f8;
+  padding: 3rem;
   text-align: center;
   .mainContent {
+    @include flexSort(column, null, null, null);
     .title {
       font-size: 24px;
       font-weight: bold;
@@ -22,7 +22,6 @@
       display: flex;
       flex-direction: column;
       gap: 40px;
-      
     }
 
     .policyItem {
@@ -33,7 +32,6 @@
       border-radius: 5px;
       background-color: white;
       height: 70px;
-      width: 1320px;
 
       p {
         margin: 0;
@@ -42,7 +40,7 @@
       }
 
       button {
-        color: #007BFF;
+        color: #007bff;
         background: none;
         border: none;
         font-weight: bold;
@@ -54,16 +52,18 @@
         background-color: #f5f5f5;
       }
     }
-
-    .exitButton {
-      margin-top: 50px;
-      padding: 10px 20px;
-      background-color: #CCCCCC;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-      
-    }
   }
+}
+
+.buttonContainer {
+  @include flexSort(null, flex-end, null, null);
+}
+
+.exitButton {
+  width: 10rem;
+  margin-top: 50px;
+  padding: 10px 20px;
+  background-color: #cccccc;
+  font-size: 16px;
+  border-radius: 5px;
 }

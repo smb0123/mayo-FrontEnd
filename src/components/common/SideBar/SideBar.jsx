@@ -109,7 +109,12 @@ export default function SideBar() {
           <Register height={50} width={50} />
           <p>등록</p>
         </Link>
-        <Link href={ROUTE.MY_PAGE} className={cn('myPageBox', { onPage: pathName === '/my-page' })}>
+        <Link
+          href={ROUTE.MY_PAGE}
+          className={cn('myPageBox', {
+            onPage: ['/my-page', '/my-page/product-info', '/my-page/store-info','/my-page/customer-center','/my-page/mayo-notices','/my-page/terms-policies'].includes(pathName),
+          })}
+        >
           <MyPage height={50} width={50} />
           <p>마이페이지</p>
         </Link>
