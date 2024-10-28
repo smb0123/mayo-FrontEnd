@@ -209,9 +209,12 @@ export default function Modal({
         </div>
 
         <div className={styles.modalButtons}>
-          <button onClick={onDelete} className={styles.deleteButton}>
-            메뉴 삭제
-          </button>
+          {/* `newProduct.itemId`가 있을 때만 삭제 버튼을 표시 */}
+          {newProduct.itemId && (
+            <button onClick={onDelete} className={styles.deleteButton}>
+              메뉴 삭제
+            </button>
+          )}
           <button onClick={handleSave} className={styles.saveButton}>
             저장
           </button>
