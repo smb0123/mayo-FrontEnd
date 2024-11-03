@@ -66,6 +66,17 @@ export default function SideBar() {
       }
     });
 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+
     // 메시지 수신 처리
     messaging.onMessage((payload) => {
       if (canPlaySound) {
