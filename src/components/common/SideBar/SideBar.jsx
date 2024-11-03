@@ -30,20 +30,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-if (!firebase.apps.length) {
-  console.log('Initializing Firebase...');
-  firebase.initializeApp(firebaseConfig);
-} else {
-  console.log('Firebase already initialized');
-}
-
-const messaging = firebase.messaging();
 
 export default function SideBar() {
   const alarmSoundRef = useRef(null);
   const [canPlaySound, setCanPlaySound] = useState(true);
   const pathName = usePathname();
   const { setAlarm } = useAlarm();
+
+  if (!firebase.apps.length) {
+    console.log('Initializing Firebase...');
+    firebase.initializeApp(firebaseConfig);
+  } else {
+    console.log('Firebase already initialized');
+  }
+
+  const messaging = firebase.messaging();
 
   useEffect(() => {
     alarmSoundRef.current = new Audio('/mp3/alarm.mp3');
