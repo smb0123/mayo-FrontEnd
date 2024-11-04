@@ -17,7 +17,10 @@ import firebase from 'firebase/compat/app';
 import Alarm from '@/icons/alarm.svg';
 import AlarmOff from '@/icons/alarm_off.svg';
 import 'firebase/compat/messaging';
-import { useAlarm } from '@/store/useStoreId';
+import { useAlarm, useStoreId, useUserId } from '@/store/useStoreId';
+import { useMutation } from '@tanstack/react-query';
+import postFcm from './apis/postFcm';
+import postUserFcm from './apis/postUserFcm';
 
 const cn = classNames.bind(styles);
 
@@ -36,6 +39,22 @@ export default function SideBar() {
   const [canPlaySound, setCanPlaySound] = useState(true);
   const pathName = usePathname();
   const { setAlarm } = useAlarm();
+  const { userId } = useUserId();
+  const { storeId } = useStoreId();
+
+  const userFcmMutation = useMutation({
+    // @ts-ignore
+    mutationFn: () => postUserFcm(userId, storeId),
+  });
+
+  const fcmMutation = useMutation({
+    // @ts-ignore
+    mutationFn: (param) => postFcm(param),
+    onSuccess: () => {
+      // @ts-ignore
+      userFcmMutation.mutate();
+    },
+  });
 
   if (!firebase.apps.length) {
     console.log('Initializing Firebase...');
@@ -57,7 +76,8 @@ export default function SideBar() {
         messaging
           .getToken()
           .then((token) => {
-            console.log('FCM Token:', token);
+            // @ts-ignore
+            fcmMutation.mutate({ userId: userId, fcmToken: token });
           })
           .catch((error) => {
             console.error('Error getting token:', error);
