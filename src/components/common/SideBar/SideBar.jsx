@@ -17,7 +17,7 @@ import firebase from 'firebase/compat/app';
 import Alarm from '@/icons/alarm.svg';
 import AlarmOff from '@/icons/alarm_off.svg';
 import 'firebase/compat/messaging';
-import { useAlarm, useStoreId, useUserId } from '@/store/useStoreId';
+import { useAlarm, useStoreId } from '@/store/useStoreId';
 import { useMutation } from '@tanstack/react-query';
 import postFcm from './apis/postFcm';
 import postUserFcm from './apis/postUserFcm';
@@ -39,12 +39,12 @@ export default function SideBar() {
   const [canPlaySound, setCanPlaySound] = useState(true);
   const pathName = usePathname();
   const { setAlarm } = useAlarm();
-  const { userId } = useUserId();
+  const token = localStorage.getItem('token');
   const { storeId } = useStoreId();
 
   const userFcmMutation = useMutation({
     // @ts-ignore
-    mutationFn: () => postUserFcm(userId, storeId),
+    mutationFn: () => postUserFcm(token, storeId),
   });
 
   const fcmMutation = useMutation({
@@ -75,9 +75,9 @@ export default function SideBar() {
         console.log('Notification permission granted.');
         messaging
           .getToken()
-          .then((token) => {
+          .then((fcmToken) => {
             // @ts-ignore
-            fcmMutation.mutate({ userId: userId, fcmToken: token });
+            fcmMutation.mutate({ token: token, fcmToken: fcmToken });
           })
           .catch((error) => {
             console.error('Error getting token:', error);
