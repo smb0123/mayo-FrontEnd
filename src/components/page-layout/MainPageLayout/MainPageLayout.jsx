@@ -21,13 +21,12 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
-import { useStoreId, useUserId } from '@/store/useStoreId';
+import { useStoreId } from '@/store/useStoreId';
 
 const cn = classNames.bind(styles);
 
 export default function MainPageLayout() {
   const { setStoreId } = useStoreId();
-  const { setUserId } = useUserId();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +47,6 @@ export default function MainPageLayout() {
         }
 
         setStoreId(userData.storeRef);
-        setUserId(userData.userid);
 
         alert('로그인에 성공하였습니다.');
         router.push(ROUTE.In_Progress);
@@ -57,7 +55,7 @@ export default function MainPageLayout() {
         console.error('로그인 조건 검증 실패:', error);
       }
     },
-    [router, setStoreId, setUserId]
+    [router, setStoreId]
   );
 
   useEffect(() => {
@@ -82,6 +80,7 @@ export default function MainPageLayout() {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
+      localStorage.setItem('token', token);
       await checkUserPermissions(token);
     } catch (error) {
       alert('Google 로그인에 실패하였습니다. 다시 시도해주세요.');
@@ -98,6 +97,7 @@ export default function MainPageLayout() {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
+      localStorage.setItem('token', token);
       await checkUserPermissions(token);
     } catch (error) {
       alert('Apple 로그인에 실패하였습니다. 다시 시도해주세요.');
@@ -111,6 +111,7 @@ export default function MainPageLayout() {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithEmailAndPassword(auth, email, password);
       const token = await result.user.getIdToken();
+      localStorage.setItem('token', token);
       await checkUserPermissions(token);
     } catch (error) {
       alert('로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요.');
