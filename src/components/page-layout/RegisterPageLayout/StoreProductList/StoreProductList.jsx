@@ -21,7 +21,7 @@ export default function StoreProductList() {
 
   const { data } = useQuery({
     queryKey: ['StoreProductList', storeId],
-    queryFn: () => getStoreProduct(storeId),
+    queryFn: () => getStoreProduct(),
   });
 
   const itemIdList = data?.map((product) => product.itemId);
