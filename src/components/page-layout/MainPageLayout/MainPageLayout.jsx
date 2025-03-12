@@ -119,19 +119,13 @@ export default function MainPageLayout() {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleEmailLogin(e);
-    }
-  };
-
   return (
     <div className={cn('loginContainer')}>
       <div className={cn('logoContainer')}>
         <Logo width={150} height={67} className={cn('logo')} />
         <h2 className={cn('subTitle')}>사장님용</h2>
       </div>
-      <form className={cn('inputContainer')} onSubmit={handleEmailLogin} onKeyDown={handleKeyDown}>
+      <form className={cn('inputContainer')} onSubmit={handleEmailLogin}>
         <input
           type="email"
           placeholder="이메일을 입력하세요"
