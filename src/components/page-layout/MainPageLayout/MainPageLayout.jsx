@@ -105,7 +105,7 @@ export default function MainPageLayout() {
     }
   };
 
-  const handleEmailLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await setPersistence(auth, browserLocalPersistence);
@@ -125,7 +125,7 @@ export default function MainPageLayout() {
         <Logo width={150} height={67} className={cn('logo')} />
         <h2 className={cn('subTitle')}>사장님용</h2>
       </div>
-      <form className={cn('inputContainer')} onSubmit={handleEmailLogin}>
+      <form className={cn('inputContainer')} onSubmit={handleLogin}>
         <input
           type="email"
           placeholder="이메일을 입력하세요"
