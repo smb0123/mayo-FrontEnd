@@ -12,13 +12,12 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   OAuthProvider,
-  getRedirectResult,
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
 import { auth } from '@/utils/firebase/firebase';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
 import { useStoreId } from '@/store/useStoreId';
@@ -31,48 +30,23 @@ export default function MainPageLayout() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const checkUserPermissions = useCallback(
-    async (token) => {
-      try {
-        const response = await axiosInstance.get('user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const userData = response.data;
+  const checkUserPermissions = async () => {
+    try {
+      const { data } = await axiosInstance.get('user');
+      const userData = data;
 
-        // storeRef가 없거나 isManager가 false일 경우 로그인 실패
-        if (!userData.storeRef || userData.isManager === false) {
-          throw new Error('로그인에 실패하였습니다. 권한이 없거나 가게 정보가 설정되지 않았습니다.');
-        }
-
-        setStoreId(userData.storeRef);
-
-        alert('로그인에 성공하였습니다.');
-        router.push(ROUTE.In_Progress);
-      } catch (error) {
-        alert('로그인에 실패하였습니다. 권한이 없거나 가게 정보가 설정되지 않았습니다.');
-        console.error('로그인 조건 검증 실패:', error);
+      if (!userData.storeRef || userData.isManager === false) {
+        throw new Error();
       }
-    },
-    [router, setStoreId]
-  );
 
-  useEffect(() => {
-    const checkRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const token = await result.user.getIdToken();
-          await checkUserPermissions(token);
-        }
-      } catch (error) {
-        console.error('리디렉션 결과 처리 중 오류 발생:', error);
-      }
-    };
+      setStoreId(userData.storeRef);
 
-    checkRedirectResult();
-  }, [checkUserPermissions]);
+      alert('로그인에 성공하였습니다.');
+      router.push(ROUTE.In_Progress);
+    } catch (error) {
+      alert(error.response?.data?.message || '권한이 없거나 가게 정보가 설정되지 않았습니다.');
+    }
+  };
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -81,7 +55,7 @@ export default function MainPageLayout() {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
       localStorage.setItem('token', token);
-      await checkUserPermissions(token);
+      await checkUserPermissions();
     } catch (error) {
       alert('Google 로그인에 실패하였습니다. 다시 시도해주세요.');
     }
@@ -97,7 +71,7 @@ export default function MainPageLayout() {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
       localStorage.setItem('token', token);
-      await checkUserPermissions(token);
+      await checkUserPermissions();
     } catch (error) {
       alert('Apple 로그인에 실패하였습니다. 다시 시도해주세요.');
     }
@@ -110,7 +84,7 @@ export default function MainPageLayout() {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const token = await result.user.getIdToken();
       localStorage.setItem('token', token);
-      await checkUserPermissions(token);
+      await checkUserPermissions();
     } catch (error) {
       alert('로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요.');
     }
