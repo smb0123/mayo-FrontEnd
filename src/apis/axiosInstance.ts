@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { auth } from '@/firebase';
+import { auth } from '@/utils/firebase/firebase';
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}`,

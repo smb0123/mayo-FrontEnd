@@ -16,7 +16,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
-import { auth } from '@/firebase';
+import { auth } from '@/utils/firebase/firebase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
