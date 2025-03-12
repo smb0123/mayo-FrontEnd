@@ -84,7 +84,6 @@ export default function MainPageLayout() {
       await checkUserPermissions(token);
     } catch (error) {
       alert('Google 로그인에 실패하였습니다. 다시 시도해주세요.');
-      console.error('Google 로그인 실패:', error);
     }
   };
 
@@ -101,7 +100,6 @@ export default function MainPageLayout() {
       await checkUserPermissions(token);
     } catch (error) {
       alert('Apple 로그인에 실패하였습니다. 다시 시도해주세요.');
-      console.error('Apple 로그인 실패:', error);
     }
   };
 
@@ -115,7 +113,6 @@ export default function MainPageLayout() {
       await checkUserPermissions(token);
     } catch (error) {
       alert('로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요.');
-      console.error('이메일 로그인 실패:', error);
     }
   };
 
