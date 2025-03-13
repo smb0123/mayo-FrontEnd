@@ -15,25 +15,47 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
-import { auth } from '@/utils/firebase/firebase';
+import { auth, firebaseConfig } from '@/utils/firebase/firebase';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axiosInstance from '@/apis/axiosInstance';
 import ROUTE from '@/constants/route';
 import { useStoreId } from '@/store/useStoreId';
+import { useMutation } from '@tanstack/react-query';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/messaging';
+import postFcm from '@/components/common/SideBar/apis/postFcm';
+import postUserFcm from '@/components/common/SideBar/apis/postUserFcm';
 
 const cn = classNames.bind(styles);
 
 export default function MainPageLayout() {
-  const { setStoreId } = useStoreId();
+  const { storeId, setStoreId } = useStoreId();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [notificationPermission, setNotificationPermission] = useState(null);
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const messaging = firebase.messaging();
+
+  const fcmMutation = useMutation({
+    mutationFn: (param) => postFcm(param),
+    onSuccess: () => {
+      userFcmMutation.mutate();
+    },
+  });
+
+  const userFcmMutation = useMutation({
+    mutationFn: () => postUserFcm(storeId),
+  });
 
   const checkUserPermissions = async () => {
     try {
-      const { data } = await axiosInstance.get('user');
-      const userData = data;
+      const { data: userData } = await axiosInstance.get('user');
 
       if (!userData.storeRef || userData.isManager === false) {
         throw new Error();
@@ -41,8 +63,24 @@ export default function MainPageLayout() {
 
       setStoreId(userData.storeRef);
 
-      alert('로그인에 성공하였습니다.');
-      router.push(ROUTE.In_Progress);
+      if (notificationPermission === 'granted') {
+        messaging
+          .getToken()
+          .then((fcmToken) => {
+            fcmMutation.mutate(
+              { fcmToken: fcmToken },
+              {
+                onSuccess: () => {
+                  alert('로그인에 성공하였습니다.');
+                  router.push(ROUTE.In_Progress);
+                },
+              }
+            );
+          })
+          .catch((error) => {
+            alert('오류 발생');
+          });
+      }
     } catch (error) {
       alert(error.response?.data?.message || '권한이 없거나 가게 정보가 설정되지 않았습니다.');
     }
@@ -84,11 +122,21 @@ export default function MainPageLayout() {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const token = await result.user.getIdToken();
       localStorage.setItem('token', token);
+
       await checkUserPermissions();
     } catch (error) {
       alert('로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요.');
     }
   };
+
+  useEffect(() => {
+    Notification.requestPermission().then((permission) => {
+      setNotificationPermission(permission);
+      if (permission !== 'granted') {
+        alert('알림을 받기 위해서는 알림 권한을 허용해주세요.');
+      }
+    });
+  }, []);
 
   return (
     <div className={cn('loginContainer')}>
