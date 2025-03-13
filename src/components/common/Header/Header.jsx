@@ -33,7 +33,6 @@ export default function Header() {
       };
 
       const formattedDateTime = now
-        // @ts-ignore
         .toLocaleString('ko-KR', options)
         .replace(/(\d{2})\/(\d{2})/, '$2.$1')
         .replace(' ', ' ');
