@@ -38,14 +38,7 @@ export default function SideBar() {
     alarmSoundRef.current = new Audio('/mp3/mayo-alarm.mp3');
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
+      navigator.serviceWorker.register('/firebase-messaging-sw.js');
     }
 
     messaging.onMessage((payload) => {
@@ -56,7 +49,6 @@ export default function SideBar() {
       }
       console.log('Message received. ', payload);
       setAlarm(payload);
-      // 알림 표시 등을 처리하는 코드 추가
     });
   }, []);
 
