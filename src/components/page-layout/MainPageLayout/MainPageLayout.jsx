@@ -51,6 +51,11 @@ export default function MainPageLayout() {
 
   const userFcmMutation = useMutation({
     mutationFn: () => postUserFcm(storeId),
+
+    onSuccess: () => {
+      alert('로그인에 성공하였습니다.');
+      router.push(ROUTE.In_Progress);
+    },
   });
 
   const checkUserPermissions = async () => {
@@ -67,15 +72,7 @@ export default function MainPageLayout() {
         messaging
           .getToken()
           .then((fcmToken) => {
-            fcmMutation.mutate(
-              { fcmToken: fcmToken },
-              {
-                onSuccess: () => {
-                  alert('로그인에 성공하였습니다.');
-                  router.push(ROUTE.In_Progress);
-                },
-              }
-            );
+            fcmMutation.mutate({ fcmToken: fcmToken });
           })
           .catch((error) => {
             alert('오류 발생');
