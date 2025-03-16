@@ -35,7 +35,7 @@ export default function CompleteOrder() {
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
     setIsDateButtonClick((prev) => !prev);
-    // @ts-ignore
+
     setNowDate(moment(selectedDate).format('YYYY-MM-DD'));
   };
 

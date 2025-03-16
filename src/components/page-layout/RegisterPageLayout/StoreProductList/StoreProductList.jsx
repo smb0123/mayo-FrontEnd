@@ -31,7 +31,6 @@ export default function StoreProductList() {
   const queryClient = useQueryClient();
 
   const storeOpenMutation = useMutation({
-    // @ts-ignore
     mutationFn: ({ storeId, itemIdList, count }) => putStoreOpen({ storeId, itemIdList, count }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['StoreProductList', storeId] });
@@ -50,7 +49,6 @@ export default function StoreProductList() {
   });
 
   const handleOpenClick = () => {
-    // @ts-ignore
     storeOpenMutation.mutate({ storeId, itemIdList, count });
   };
 

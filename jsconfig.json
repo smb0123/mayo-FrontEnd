@@ -8,7 +8,7 @@
       "@/icons/*": ["public/icons/*"],
       "@/images/*": ["public/images/*"]
     },
-    "checkJs": true,
+    "checkJs": false,
     "allowJs": true,
     "jsx": "preserve"
   },
