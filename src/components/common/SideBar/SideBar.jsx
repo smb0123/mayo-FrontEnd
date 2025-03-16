@@ -37,6 +37,15 @@ export default function SideBar() {
   useEffect(() => {
     alarmSoundRef.current = new Audio('/mp3/mayo-alarm.mp3');
 
+    const stopAlarmSound = () => {
+      if (alarmSoundRef.current && !alarmSoundRef.current.paused) {
+        alarmSoundRef.current.pause();
+        alarmSoundRef.current.currentTime = 0;
+      }
+    };
+
+    document.addEventListener('click', stopAlarmSound);
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/firebase-messaging-sw.js');
     }
@@ -47,9 +56,12 @@ export default function SideBar() {
           console.log('알람 재생 오류:', error);
         });
       }
-      console.log('Message received. ', payload);
       setAlarm(payload);
     });
+
+    return () => {
+      document.removeEventListener('click', stopAlarmSound);
+    };
   }, []);
 
   return (
