@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axiosInstance from '@/apis/axiosInstance';
 import Modal from '@/components/common/NotiModal/NotiModal';
+import { useRouter } from 'next/navigation';
+import ROUTE from '@/constants/route';
 
 export default function MayoNotice() {
   const [notices, setNotices] = useState([]);
@@ -11,6 +13,7 @@ export default function MayoNotice() {
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -36,6 +39,21 @@ export default function MayoNotice() {
     setModalOpen(false);
     setSelectedNotice(null);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storeId = localStorage.getItem('storeId');
+
+    if (!token) {
+      alert('로그인 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+
+    if (!storeId) {
+      alert('가게 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+  }, [router]);
 
   if (error) {
     return <div>{error}</div>;

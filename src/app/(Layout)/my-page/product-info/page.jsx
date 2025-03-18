@@ -5,12 +5,15 @@ import Link from 'next/link';
 
 import ProductModal from '@/components/common/ProductModal/ProductModal';
 import multiPartAxiosInstance from '@/apis/multiPartAxiosInstance'; // multipart axios 인스턴스 사용
+import { useRouter } from 'next/navigation';
+import ROUTE from '@/constants/route';
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [storeId, setStoreId] = useState(null); // storeId를 상태로 저장
+  const router = useRouter();
 
   // 사용자 정보를 가져오는 함수
   const fetchUserInfo = async () => {
@@ -183,6 +186,21 @@ export default function ProductList() {
       }
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storeId = localStorage.getItem('storeId');
+
+    if (!token) {
+      alert('로그인 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+
+    if (!storeId) {
+      alert('가게 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+  }, [router]);
 
   return (
     <div className={styles.container}>

@@ -1,8 +1,10 @@
-"use client";
+'use client';
 import styles from './page.module.scss';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 import
+import ROUTE from '@/constants/route';
+import { useRouter } from 'next/navigation';
 
 export default function StoreInfo() {
   const [storeId, setStoreId] = useState(''); // storeId를 상태로 관리
@@ -13,6 +15,7 @@ export default function StoreInfo() {
   const [discountHours, setDiscountHours] = useState({ start: '', end: '' });
   const [additionalComment, setAdditionalComment] = useState('');
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   // 유효성 검사 에러 상태 관리
   const [validationErrors, setValidationErrors] = useState({
@@ -37,7 +40,7 @@ export default function StoreInfo() {
 
         setStoreId(userData.storeRef); // storeRef를 storeId로 설정
       } catch (err) {
-        console.error("사용자 정보를 가져오는 중 오류 발생:", err);
+        console.error('사용자 정보를 가져오는 중 오류 발생:', err);
         setError('사용자 정보를 가져오는 데 실패했습니다.');
       }
     };
@@ -62,7 +65,7 @@ export default function StoreInfo() {
         setDiscountHours({ start: data.saleStart, end: data.saleEnd });
         setAdditionalComment(data.additionalComment);
       } catch (err) {
-        console.error("가게 정보를 가져오는 중 오류 발생:", err);
+        console.error('가게 정보를 가져오는 중 오류 발생:', err);
         setError('가게 정보를 가져오는 데 실패했습니다.');
       }
     };
@@ -142,10 +145,25 @@ export default function StoreInfo() {
         alert('저장 완료되었습니다.');
       }
     } catch (err) {
-      console.error("가게 정보를 저장하는 중 오류 발생:", err);
+      console.error('가게 정보를 저장하는 중 오류 발생:', err);
       alert('저장하는 데 실패했습니다.');
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storeId = localStorage.getItem('storeId');
+
+    if (!token) {
+      alert('로그인 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+
+    if (!storeId) {
+      alert('가게 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+  }, [router]);
 
   if (error) {
     return <div>{error}</div>;
@@ -159,69 +177,49 @@ export default function StoreInfo() {
       <div className={styles.content}>
         <div className={styles.storeInfo}>
           <label>상점명</label>
-          <input
-            type="text"
-            value={storeName}
-            onChange={(e) => setStoreName(e.target.value)}
-          />
+          <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} />
           {validationErrors.storeName && <div className={styles.error}>{validationErrors.storeName}</div>}
-          
+
           <label>가게 주소</label>
-          <input
-            type="text"
-            value={storeAddress}
-            onChange={(e) => setStoreAddress(e.target.value)}
-          />
+          <input type="text" value={storeAddress} onChange={(e) => setStoreAddress(e.target.value)} />
           {validationErrors.storeAddress && <div className={styles.error}>{validationErrors.storeAddress}</div>}
-          
+
           <label>가게 번호</label>
-          <input
-            type="text"
-            value={storeNumber}
-            onChange={(e) => setStoreNumber(e.target.value)}
-          />
+          <input type="text" value={storeNumber} onChange={(e) => setStoreNumber(e.target.value)} />
           {validationErrors.storeNumber && <div className={styles.error}>{validationErrors.storeNumber}</div>}
-          
+
           <label>영업시간</label>
           <div className={styles.timeInput}>
             <input
               type="text"
               placeholder="시작 00:00"
               value={openingHours.open}
-              onChange={(e) =>
-                setOpeningHours({ ...openingHours, open: e.target.value })
-              }
+              onChange={(e) => setOpeningHours({ ...openingHours, open: e.target.value })}
             />
             <span className={styles.water}>~</span>
             <input
               type="text"
               placeholder="종료 00:00"
               value={openingHours.close}
-              onChange={(e) =>
-                setOpeningHours({ ...openingHours, close: e.target.value })
-              }
+              onChange={(e) => setOpeningHours({ ...openingHours, close: e.target.value })}
             />
           </div>
           {validationErrors.openingHours && <div className={styles.error}>{validationErrors.openingHours}</div>}
-          
+
           <label>할인시간</label>
           <div className={styles.timeInput}>
             <input
               type="text"
               placeholder="시작 00:00"
               value={discountHours.start}
-              onChange={(e) =>
-                setDiscountHours({ ...discountHours, start: e.target.value })
-              }
+              onChange={(e) => setDiscountHours({ ...discountHours, start: e.target.value })}
             />
             <span className={styles.water}>~</span>
             <input
               type="text"
               placeholder="종료 00:00"
               value={discountHours.end}
-              onChange={(e) =>
-                setDiscountHours({ ...discountHours, end: e.target.value })
-              }
+              onChange={(e) => setDiscountHours({ ...discountHours, end: e.target.value })}
             />
           </div>
           {validationErrors.discountHours && <div className={styles.error}>{validationErrors.discountHours}</div>}
@@ -233,14 +231,18 @@ export default function StoreInfo() {
             value={additionalComment}
             onChange={(e) => setAdditionalComment(e.target.value)}
           />
-          {validationErrors.additionalComment && <div className={styles.error}>{validationErrors.additionalComment}</div>}
+          {validationErrors.additionalComment && (
+            <div className={styles.error}>{validationErrors.additionalComment}</div>
+          )}
         </div>
       </div>
       <div className={styles.buttons}>
         <Link href="/my-page">
           <button className={styles.exitButton}>뒤로가기</button>
         </Link>
-        <button className={styles.saveButton} onClick={handleSave}>저장</button>
+        <button className={styles.saveButton} onClick={handleSave}>
+          저장
+        </button>
       </div>
     </div>
   );

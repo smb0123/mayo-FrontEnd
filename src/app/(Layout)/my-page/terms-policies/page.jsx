@@ -1,15 +1,18 @@
 'use client';
 import styles from '@/app/(Layout)/my-page/terms-policies/page.module.scss';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axiosInstance from '@/apis/axiosInstance'; // axiosInstance를 불러옵니다.
 import Modal from '@/components/common/Modal/Modal';
+import { useRouter } from 'next/navigation';
+import ROUTE from '@/constants/route';
 
 export default function Terms() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedContent, setSelectedContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const fetchData = async (boardId) => {
     setIsLoading(true);
@@ -32,6 +35,21 @@ export default function Terms() {
     setIsModalOpen(false);
     setSelectedContent('');
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storeId = localStorage.getItem('storeId');
+
+    if (!token) {
+      alert('로그인 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+
+    if (!storeId) {
+      alert('가게 정보가 없습니다. 다시 로그인해주세요');
+      return router.push(ROUTE.HOME);
+    }
+  }, [router]);
 
   if (error) {
     return <div>서버 오류</div>;

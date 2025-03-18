@@ -43,6 +43,7 @@ export default function MainPageLayout() {
   const messaging = firebase.messaging();
 
   const fcmMutation = useMutation({
+    // @ts-ignore
     mutationFn: (param) => postFcm(param),
     onSuccess: () => {
       userFcmMutation.mutate();
@@ -72,8 +73,10 @@ export default function MainPageLayout() {
         messaging
           .getToken()
           .then((fcmToken) => {
+            // @ts-ignore
             fcmMutation.mutate({ fcmToken: fcmToken });
           })
+          // @ts-ignore
           .catch((error) => {
             alert('오류 발생');
           });
